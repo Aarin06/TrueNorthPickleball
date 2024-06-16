@@ -1,0 +1,3 @@
+light red: #ff332c
+dark red:#ac1121
+navy: #091f37

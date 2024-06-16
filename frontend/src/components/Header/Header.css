@@ -1,0 +1,21 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  z-index: 20;
+  margin-right: 30px;
+  width: 100%;
+  color: white;
+  z-index: 15;
+  background-color: #ac1121;
+}
+
+.icon {
+  width: 80px;
+  justify-self: end;
+  z-index: 10;
+}
+
+.align-right {
+  margin-left: auto;
+}
