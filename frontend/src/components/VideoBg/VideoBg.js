@@ -1,5 +1,5 @@
 import "./VideoBg.css";
-import videoBg from "../../media/video2.mp4";
+import videoBg from "../../media/video01.MP4";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
@@ -18,7 +18,7 @@ function VideoBg() {
           LinkComponent={Link}
           to="/join"
           variant="contained"
-          sx={{ fontSize: "50px", borderRadius: "70px", padding: "5px 40px" }}
+          sx={{ fontSize: "50px", borderRadius: "70px", padding: "5px 40px", marginTop:"10px" }}
         >
           Join Now
         </Button>

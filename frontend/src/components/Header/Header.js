@@ -11,7 +11,9 @@ const click = () => {
 function Header() {
   return (
     <div className="header">
+      <Link to={"/"} className="font-bold">
       <img className="icon" src={Logo} alt="logo" />
+      </Link>
       <div className=" flex mr-auto gap-5">
         <Link to={"/"} className="font-bold">
           True North Pickleball

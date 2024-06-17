@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import "./Signup.css";
 import Logo from "../../media/logo.png";
-import { Card, Grid, TextField, Button } from "@mui/material";
+import { Card, Grid, Button } from "@mui/material";
 import CreateTeam from "../../components/CreateTeam/CreateTeam";
 import JoinTeam from "../../components/JoinTeam/JoinTeam";
-import InputMask from "react-input-mask";
-import { Link } from "react-router-dom";
+import { addUser } from "../../api/userService";
+import { addTeam, joinTeam } from "../../api/teamService";
+import CreateAccount from "../../components/CreateAccount";
 
 function Signup() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -15,6 +15,7 @@ function Signup() {
   const [team, setTeam] = useState([
     {
       label: "Team Name",
+      key:"name",
       value: "",
       helperText: "",
       error: false,
@@ -22,22 +23,23 @@ function Signup() {
     },
     {
       label: "Experience",
+      key:"experienceLevel",
       value: "",
       helperText: "",
       error: false,
       change: (value) => updateTeam("Experience", value),
       options: [
         {
-          label: "First time playing",
-          value: "0",
+          label: "First time playing (Beginner)",
+          value: 0,
         },
         {
-          label: "Played a couple times",
-          value: "1",
+          label: "Played a couple times (Intermediate)",
+          value: 1,
         },
         {
-          label: "Play consistently",
-          value: "2",
+          label: "Play consistently (Advanced)",
+          value: 2,
         },
       ],
     },
@@ -46,22 +48,25 @@ function Signup() {
   const [emergencyFields, SetEmergencyFields] = useState([
     {
       label: "Contact Name",
+      key:"emergContactName",
       value: "",
       helperText: "",
       error: false,
       change: (value) => updateEmergency("Contact Name", value),
-      size: 6,
+      size: 12,
     },
     {
       label: "Phone Number",
+      key:"emergContactPhoneNumber",
       value: "",
       helperText: "",
       error: false,
       change: (value) => updateEmergency("Phone Number", value),
-      size: 6,
+      size: 12,
     },
     {
       label: "Relationship",
+      key:"emergContactRelationship",
       value: "",
       helperText: "",
       error: false,
@@ -73,51 +78,57 @@ function Signup() {
   const [fields, setFields] = useState([
     {
       label: "First Name",
+      key:"firstName",
       value: "",
       helperText: "",
       error: false,
       change: (value) => updateField("First Name", value),
-      size: 6,
+      size: 12,
     },
     {
       label: "Last Name",
+      key:"lastName",
       value: "",
       helperText: "",
       error: false,
       change: (value) => updateField("Last Name", value),
-      size: 6,
+      size: 12,
     },
     {
       label: "Password",
+      key:"password",
       value: "",
       helperText: "",
       error: false,
       change: (value) => updateField("Password", value),
-      size: 6,
+      size: 12,
     },
     {
       label: "Confirm Password",
+      key:"confirmPassword",
       value: "",
       helperText: "",
       error: false,
       change: (value) => updateField("Confirm Password", value),
-      size: 6,
+      size: 12,
     },
     {
       label: "Email",
+      key:"email",
       value: "",
       helperText: "",
       error: false,
       change: (value) => updateField("Email", value),
-      size: 6,
+      size: 12,
     },
     {
       label: "Phone Number",
+      key:"phoneNumber",
       value: "",
       helperText: "",
       error: false,
       change: (value) => updateField("Phone Number", value),
-      size: 6,
+      size: 12,
     },
   ]);
 
@@ -222,9 +233,42 @@ function Signup() {
 
     if (allFieldsValid) {
       // Handle the actual submission here
-      console.log(fields);
-      console.log(emergencyFields);
-      console.log(team);
+      let userData = [...fields, ...emergencyFields ];
+
+      userData = userData.reduce((acc, field) => {
+        acc[field.key] = field.value;
+        return acc;
+      }, {});
+      
+      let teamData = team.reduce((acc, field) => {
+        acc[field.key] = field.value;
+        return acc;
+      }, {});
+
+      console.log(userData);
+      console.log(teamData);
+
+      delete userData.confirmPassword
+
+      addUser(userData).then((responseUser) =>{
+        console.log(responseUser)
+
+        teamData.captain = responseUser.userId
+
+        if(create){
+          addTeam(teamData).then((responseTeam) =>{
+            console.log(responseTeam)
+          });
+        }
+        else{
+          joinTeam(team[0].value, responseUser.userId).then((responseTeam) =>{
+            console.log(responseTeam)
+          })
+        }
+      });
+
+
+
       console.log("Form Submitted");
     }
   };
@@ -232,10 +276,12 @@ function Signup() {
   const handleTeamSubmission = () => {
     let allFieldsValidCreate = true;
     let allFieldsValidJoin = true;
-
+    console.log(team);
     const updatedTeam = team.map((field) => {
+      console.log(field)
       if (field.value.trim() === "") {
-        if (field.label === "Team Name") allFieldsValidJoin = false;
+        if (field.label === "Team Name")
+          allFieldsValidJoin = false;
         allFieldsValidCreate = false;
         return {
           ...field,
@@ -252,7 +298,7 @@ function Signup() {
 
   return (
     <Grid className="grid-center mt-8" container spacing={0}>
-      <Card sx={{ width: state === 2 ? "80%" : "400px" }}>
+      <Card sx={{ width: state === 2 ? "80%" : "350px" }}>
         {state === 0 ? (
           <div className="content-center">
             <img className="max-w-44" src={Logo} alt="logo" />
@@ -261,6 +307,8 @@ function Signup() {
                 onClick={() => {
                   setState(1);
                   setCreate(true);
+                  setTeam(prevTeam => prevTeam.map(item => ({ ...item, value: "", error:false,helperText:""})));
+
                 }}
                 variant="contained"
               >
@@ -270,6 +318,8 @@ function Signup() {
                 onClick={() => {
                   setState(1);
                   setCreate(false);
+                  setTeam(prevTeam => prevTeam.map(item => ({ ...item, value: "", error:false,helperText:""})));
+
                 }}
                 variant="contained"
               >
@@ -282,103 +332,7 @@ function Signup() {
         ) : state === 1 && !create ? (
           <JoinTeam team={team[0]} />
         ) : state === 2 ? (
-          <>
-            <h1 className=" pl-14 pt-14 pb-4 text-2xl">Personal Information</h1>
-            <Grid container spacing={2} className="pl-14 pr-14 pb-14">
-              {fields.map((field) => (
-                <Grid item xs={field.size} key={field.label}>
-                  {field.label === "Phone Number" ? (
-                    <InputMask
-                      mask="999-999-9999"
-                      value={field.value}
-                      onChange={(e) => field.change(e.target.value)}
-                      key={field.label}
-                    >
-                      {() => (
-                        <TextField
-                          required
-                          className="w-full"
-                          color="secondary"
-                          label={field.label}
-                          helperText={field.helperText}
-                          error={field.error}
-                          value={field.value ? field.value:""}
-
-                        />
-                      )}
-                    </InputMask>
-                  ) : (
-                    <TextField
-                      required
-                      key={field.label}
-                      className="w-full"
-                      color="secondary"
-                      label={field.label}
-                      type={
-                        field.label === "Password" ||
-                        field.label === "Confirm Password"
-                          ? "password"
-                          : "text"
-                      }
-                      onChange={(e) => field.change(e.target.value)}
-                      helperText={field.helperText}
-                      error={field.error}
-                    />
-                  )}
-                </Grid>
-              ))}
-            </Grid>
-            <h1 className=" pl-14 pb-4 text-2xl">Emergency Contact Information</h1>
-            <Grid container spacing={2} className="pl-14 pr-14 pb-14">
-              {emergencyFields.map((field) => (
-                <Grid item xs={field.size} key={field.label}>
-                  {field.label === "Phone Number" ? (
-                    <InputMask
-                      mask="999-999-9999"
-                      value={field.value}
-                      onChange={(e) => field.change(e.target.value)}
-                      key={field.label}
-                    >
-                      {() => (
-                        <TextField
-                          required
-                          className="w-full"
-                          color="secondary"
-                          label={field.label}
-                          helperText={field.helperText}
-                          error={field.error}
-                          value={field.value ? field.value:""}
-
-                        />
-                      )}
-                    </InputMask>
-                  ) : (
-                    <TextField
-                      required
-                      key={field.label}
-                      className="w-full"
-                      color="secondary"
-                      label={field.label}
-                      onChange={(e) => field.change(e.target.value)}
-                      helperText={field.helperText}
-                      error={field.error}
-                    />
-                  )}
-                </Grid>
-              ))}
-              <Grid item xs={12}>
-                <Button
-                  onClick={handleSubmission}
-                  className="w-full"
-                  variant="contained"
-                  LinkComponent={Link}
-                  to="https://buy.stripe.com/test_eVa7sJgxL7Gi0lWcMM"
-                >
-                  Sign Up
-                </Button>
-              </Grid>
-            </Grid>
-          </>
+          <CreateAccount fields={fields} emergencyFields={emergencyFields} handleSubmission={handleSubmission}/>
         ) : (
           <></>
         )}

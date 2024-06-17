@@ -9,8 +9,8 @@ const teamSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    expirenceLevel: {
-      type: String,
+    experienceLevel: {
+      type: Number,
       required: true,
     },
     playerCount: {
@@ -23,6 +23,4 @@ const teamSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-const Team =  mongoose.model('Team', teamSchema);
-
-export default Team;
+module.exports = mongoose.model('Team', teamSchema);

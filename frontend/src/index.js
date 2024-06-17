@@ -10,17 +10,25 @@ import { ThemeProvider } from "@mui/material";
 import mainTheme from "./Themes/mainTheme";
 import Join from "./pages/Join/Join";
 import Header from "./components/Header/Header";
+import Teams from "./pages/Teams/Teams";
+import Team from "./pages/Team";
+import useMediaQuery from '@mui/material/useMediaQuery';
+import HeaderMobile from "./components/Header/HeaderMobile";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
+
 const Layout = ({ children }) => {
+  const isMobile = useMediaQuery('(max-width:600px)');
+
   return (
     <>
-      <Header />
+      {isMobile ? <HeaderMobile /> : <Header />}
       {children}
     </>
   );
 };
+
 
 const router = createBrowserRouter([
   {
@@ -57,7 +65,20 @@ const router = createBrowserRouter([
   },
   {
     path: "/teams",
-    element: <div>test</div>,
+    element: (
+      <Layout>
+        <Teams />
+      </Layout>
+    ),
+    errorElement: <div>404 not found</div>,
+  },
+  {
+    path: "/teams/:teamId",
+    element: (
+      <Layout>
+        <Team />
+      </Layout>
+    ),
     errorElement: <div>404 not found</div>,
   },
   {

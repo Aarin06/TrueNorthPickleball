@@ -3,12 +3,18 @@ require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
 const userRoutes = require('./routes/userRoutes')
+const teamRoutes = require('./routes/teamRoutes')
+const cors =require('cors');
 
 // express app
 const app = express()
 
 // middleware
 app.use(express.json())
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 
 app.use((req, res, next) => {
   console.log(req.path, req.method)
@@ -23,6 +29,7 @@ if (!mongoUri) {
 
 // routes
 app.use('/api/users', userRoutes);
+app.use('/api/teams', teamRoutes);
 
 // connect to db
 mongoose.connect(mongoUri)

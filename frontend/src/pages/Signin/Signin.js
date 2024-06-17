@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import "./Signin.css";
+import React, { useState } from "react";
 import Logo from "../../media/logo.png";
 import { Card, Grid, TextField, Button } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -55,7 +54,7 @@ function Signin() {
 
   return (
     <Grid className="grid-center" container spacing={0}>
-      <Card>
+      <Card sx={{ width: "350px" }}>
         <div className="content-center">
           <img className="max-w-44" src={Logo} alt="logo" />
           {fields.map((field) => (
@@ -77,7 +76,7 @@ function Signin() {
             Sign In
           </Button>
           <div className="flex w-full">
-            <p className="font-medium">Forgot Password?</p>
+            {/* <p className="font-medium">Forgot Password?</p> */}
             <Link to="/join" className="ml-auto font-medium">
               Join Now
             </Link>

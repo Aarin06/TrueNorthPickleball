@@ -33,8 +33,8 @@ const mainTheme = createTheme({
           "&:hover": {
             backgroundColor: "#ff332c", // Change background color on hover
           },
-          minWidth: "120px",
-          minHeight: "40px",
+          minWidth: "80px",
+          minHeight: "20px",
           textTransform: "none",
         },
       },
@@ -44,7 +44,6 @@ const mainTheme = createTheme({
         root: {
           borderRadius: "5px",
           backgroundColor: "#ffffff", // Change background color
-          width: "400px",
         },
       },
     },
@@ -54,7 +53,7 @@ const mainTheme = createTheme({
           borderRadius: "5px",
           // backgroundColor: '#dcdcdc', // Change background color
           height: "100vh",
-          width: "100%",
+          width: "90%",
         },
       },
     },

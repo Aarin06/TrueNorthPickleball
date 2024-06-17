@@ -2,28 +2,28 @@ import Logo from "../../media/logo.png";
 import React, { useState, useEffect } from "react";
 
 import { FormHelperText, MenuItem, FormControl, InputLabel, Select } from "@mui/material";
-
+import { getTeams } from "../../api/teamService";
 import { Link } from "react-router-dom";
+import { experienceMapping } from "../../Mappings/experienceLevel";
 
 function JoinTeam({ team, rank }) {
 
-  const [teamOptions, setTeamOptions] = useState([
-    {
-      label: "First time playing",
-      value: "0",
-    },
-    {
-      label: "Played a couple times",
-      value: "1",
-    },
-    {
-      label: "Play consistently",
-      value: "2",
-    },
-  ],);
+  const [teamOptions, setTeamOptions] = useState([]);
 
 
-
+  useEffect(() => {
+    console.log(team);
+    getTeams().then((response) =>{
+      response.map((item)=>{
+        item.label = item.name+" ("+experienceMapping[item.experienceLevel]+")";
+        if (item.playerCount === 4){
+          item.label += " FULL";
+        }
+      })
+      console.log(response)
+      setTeamOptions(response);
+    })
+  }, [])
 
 
   return (
@@ -34,10 +34,10 @@ function JoinTeam({ team, rank }) {
         <Select
           label="Teams"
           value={team.value}
-          onChange={(e) => {team.change(e.target.value);console.log(e.target)}}
+          onChange={(e) => {team.change(e.target.value)}}
         >
           {teamOptions.map((option) => {
-            return <MenuItem value={option.value}>{option.label}</MenuItem>;
+            return <MenuItem disabled={option.playerCount === 4 ? true : false} key={option.id} value={option.name}>{option.label}</MenuItem>;
           })}
         </Select>
         <FormHelperText>{team.helperText}</FormHelperText>

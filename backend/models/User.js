@@ -21,15 +21,15 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    DOB: {
-        type: Date,
-        required: true
-    },
+    // DOB: {
+    //     type: Date,
+    //     required: true
+    // },
     emergContactName: {
       type: String,
       required: true
-  },
-    emergPhoneNumber: {
+    },
+    emergContactPhoneNumber: {
       type: String,
       required: true,
   },
