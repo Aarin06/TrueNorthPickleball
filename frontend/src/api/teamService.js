@@ -90,10 +90,32 @@ const getRoster = function (teamId) {
     }
     return res.json();
   })
+  .catch((error) => { 
+    console.error('There was a problem with the fetch operation:', error);
+  });
+};
+
+const makeTeamPayment = function (teamId, userId) {
+  return fetch(SERVER_URL+"/api/teams/payment", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({teamId: teamId, userId:userId}),  // Ensure teamData is not wrapped in another object
+  })
+  .then((res) => {
+    if (!res.ok) {
+      throw new Error('Network response was not ok ' + res.statusText);
+    }
+    
+    return res.json();
+  })
   .catch((error) => {
     console.error('There was a problem with the fetch operation:', error);
   });
 };
+
+
 
 
 export {
@@ -103,5 +125,6 @@ export {
   getTeam,
   getTeamCaptain, 
   getRoster,
+  makeTeamPayment
 
 };

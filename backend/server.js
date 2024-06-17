@@ -7,6 +7,8 @@ const teamRoutes = require('./routes/teamRoutes')
 const session = require("express-session");
 const cors =require('cors');
 
+const stripeSecret = process.env.STRIPE_SECRET;
+const stripe = require("stripe")(stripeSecret)
 // express app
 const app = express()
 

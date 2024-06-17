@@ -18,6 +18,7 @@ import HeaderMobile from "./components/Header/HeaderMobile";
 import AboutUs from "./pages/AboutUs";
 import Schedule from "./pages/Schedule";
 import { getMe } from "./api/userService";
+import Waiver from "./pages/Waiver";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 
@@ -141,6 +142,15 @@ const router = createBrowserRouter([
     element: (
       <Layout>
         <Join />
+      </Layout>
+    ),
+    errorElement: <div>404 not found</div>,
+  },
+  {
+    path: "/waiver",
+    element: (
+      <Layout>
+        <Waiver />
       </Layout>
     ),
     errorElement: <div>404 not found</div>,

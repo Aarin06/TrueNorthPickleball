@@ -28,17 +28,13 @@ const getUser = async (req, res) => {
 
 // get a single workout
 const getMe = async (req, res) => {
-  console.log(req.session);
-
-
   if (!req.session){
     return res.json(null);
   }
   
+  console.log(req.session);
+  
   const user = await User.findById(req.session.userId);
-
-  console.log("testing");
-
 
   if (user === null) {
     return res.json(null);
@@ -73,6 +69,8 @@ const signIn = async (req, res) => {
   const { userData } = req.body
 
   try {
+
+    console.log(userData)
     
     const user = await User.findOne({email: userData.email});
 
@@ -88,9 +86,8 @@ const signIn = async (req, res) => {
       return res.status(401).json({ error: "Incorrect username or password." });
     }
     
-    req.session.userId = {userId:user.id};
+    req.session.userId = user.id;
     console.log(req.session)
-
     res.status(200).json({userId:user.id});
   } catch (error) {
     res.status(400).json({ error: error.message });

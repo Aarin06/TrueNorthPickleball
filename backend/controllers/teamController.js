@@ -1,8 +1,11 @@
+require('dotenv').config()
+
 const Team = require('../models/Team')
 const User = require('../models/User')
 const TeamMember = require('../models/TeamMember')
 const mongoose = require('mongoose')
-
+const stripeSecret = process.env.STRIPE_SECRET;
+const stripe = require("stripe")(stripeSecret)
 // get all workouts
 const getTeams = async (req, res) => {
   const users = await Team.find({}).sort({createdAt: -1})
@@ -173,6 +176,33 @@ const joinTeam = async (req, res) => {
   }
 }
 
+const makeTeamPayment = async (req, res) => {
+  console.log("ssss");
+
+  const lineItems = [{
+    price_data: {
+      currency: "cad",
+      product_data: {
+        name: "League Membership",
+      },
+      unit_amount: 30000
+    },
+    quantity: 1
+  }];
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: lineItems,
+    mode: "payment",
+    success_url: "https://example.com/success",
+    cancel_url: "https://example.com/cancel"
+  });
+
+  console.log(session);
+
+  res.json({ id: session.id });
+};
+
 
 
 module.exports = {
@@ -182,5 +212,6 @@ module.exports = {
   updateTeam,
   joinTeam,
   getTeamCaptain,
-  getRoster
+  getRoster,
+  makeTeamPayment
 }
