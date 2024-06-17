@@ -3,14 +3,20 @@ import Logo from "../../media/logo.png";
 import { Card, Grid, Button } from "@mui/material";
 import CreateTeam from "../../components/CreateTeam/CreateTeam";
 import JoinTeam from "../../components/JoinTeam/JoinTeam";
-import { addUser } from "../../api/userService";
+import { addUser, signIn } from "../../api/userService";
 import { addTeam, joinTeam } from "../../api/teamService";
 import CreateAccount from "../../components/CreateAccount";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
+  const navigate = useNavigate();
+
   const [create, setCreate] = useState(false);
+  const [err, setErr] = useState("");
+
+
   const [state, setState] = useState(0);
   const [team, setTeam] = useState([
     {
@@ -31,15 +37,15 @@ function Signup() {
       options: [
         {
           label: "First time playing (Beginner)",
-          value: 0,
+          value: "0",
         },
         {
           label: "Played a couple times (Intermediate)",
-          value: 1,
+          value: "1",
         },
         {
           label: "Play consistently (Advanced)",
-          value: 2,
+          value: "2",
         },
       ],
     },
@@ -250,33 +256,38 @@ function Signup() {
 
       delete userData.confirmPassword
 
-      addUser(userData).then((responseUser) =>{
-        console.log(responseUser)
+      addUser(userData)
+      .then((responseUser) => {
+        console.log("res", responseUser);
 
-        teamData.captain = responseUser.userId
+        teamData.captain = responseUser._id;
 
-        if(create){
-          addTeam(teamData).then((responseTeam) =>{
-            console.log(responseTeam)
+        if (create) {
+          addTeam(teamData).then((responseTeam) => {
+            console.log(responseTeam);
+          });
+        } else {
+          joinTeam(team[0].value, responseUser.userId).then((responseTeam) => {
+            console.log(responseTeam);
           });
         }
-        else{
-          joinTeam(team[0].value, responseUser.userId).then((responseTeam) =>{
-            console.log(responseTeam)
-          })
-        }
+
+        signIn(responseUser).then((response) =>{
+          navigate('/'); // Navigate to the home page
+        })
+
+      })
+      .catch((error) => {
+        setErr(error.message);
+        console.log("There was a problem with the fetch operation:", error.message || error);
       });
-
-
-
-      console.log("Form Submitted");
     }
   };
 
   const handleTeamSubmission = () => {
     let allFieldsValidCreate = true;
     let allFieldsValidJoin = true;
-    console.log(team);
+    // console.log(team);
     const updatedTeam = team.map((field) => {
       console.log(field)
       if (field.value.trim() === "") {
@@ -298,7 +309,7 @@ function Signup() {
 
   return (
     <Grid className="grid-center mt-8" container spacing={0}>
-      <Card sx={{ width: state === 2 ? "80%" : "350px" }}>
+      <Card elevation={10} sx={{ width: state === 2 ? "80%" : "350px" }}>
         {state === 0 ? (
           <div className="content-center">
             <img className="max-w-44" src={Logo} alt="logo" />
@@ -332,7 +343,7 @@ function Signup() {
         ) : state === 1 && !create ? (
           <JoinTeam team={team[0]} />
         ) : state === 2 ? (
-          <CreateAccount fields={fields} emergencyFields={emergencyFields} handleSubmission={handleSubmission}/>
+          <CreateAccount fields={fields} emergencyFields={emergencyFields} handleSubmission={handleSubmission} error={err}/>
         ) : (
           <></>
         )}

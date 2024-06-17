@@ -2,11 +2,17 @@ import React, { useState } from "react";
 import Logo from "../../media/logo.png";
 import { Card, Grid, TextField, Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import { signIn } from "../../api/userService";
+import { useNavigate } from "react-router-dom";
+
 
 function Signin() {
+  const navigate = useNavigate();
+
   const [fields, setFields] = useState([
     {
       label: "Email",
+      key:"email",
       value: "",
       helperText: "",
       error: false,
@@ -14,6 +20,7 @@ function Signin() {
     },
     {
       label: "Password",
+      key:"password",
       value: "",
       helperText: "",
       error: false,
@@ -22,16 +29,16 @@ function Signin() {
   ]);
 
   const updateField = (label, value) => {
-    setFields(
-      fields.map((field) =>
+    setFields((prevFields) =>
+      prevFields.map((field) =>
         field.label === label
           ? { ...field, value, helperText: "", error: false }
           : field,
       ),
     );
   };
-
   const handleSubmission = () => {
+    console.log(fields)
     let allFieldsValid = true;
     const updatedFields = fields.map((field) => {
       if (field.value.trim() === "") {
@@ -47,8 +54,16 @@ function Signin() {
     setFields(updatedFields);
 
     if (allFieldsValid) {
-      // Handle the actual submission here
-      console.log("Form Submitted");
+      let userData = fields;
+
+      userData = userData.reduce((acc, field) => {
+        acc[field.key] = field.value;
+        return acc;
+      }, {});
+
+      signIn(userData).then((res) =>{
+        navigate("/");
+      })
     }
   };
 

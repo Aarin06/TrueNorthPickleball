@@ -11,6 +11,41 @@ const addUser = function (userData) {
   })
   .then((res) => {
     if (!res.ok) {
+      return res.json().then(error => {
+        throw new Error(error.message);
+      });
+    }
+    return res.json();
+  })
+  .catch((error) => {
+    console.error(error.message);
+    throw error
+  });
+};
+
+ const signIn = function (userData) {
+  return fetch(SERVER_URL+"/api/users/signin", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({userData: userData}),
+    credentials: 'include',
+  })
+  .then((res) => {
+    if (!res.ok) {
+      throw new Error('Network response was not ok ' + res.statusText);
+    }
+    return res.json();
+  })
+  .catch((error) => {
+    console.error('There was a problem with the fetch operation:', error);
+    throw error
+  });
+};
+
+const signOut = function () {
+  return fetch(SERVER_URL+"/api/users/signout")
+  .then((res) => {
+    if (!res.ok) {
       throw new Error('Network response was not ok ' + res.statusText);
     }
     return res.json();
@@ -20,6 +55,19 @@ const addUser = function (userData) {
   });
 };
 
+const getMe = function () {
+  return fetch(SERVER_URL+"/api/users/me")
+  .then((res) => {
+    if (!res.ok) {
+      throw new Error('Network response was not ok ' + res.statusText);
+    }
+    return res.json();
+  })
+  .catch((error) => {
+    console.error('There was a problem with the fetch operation:', error);
+    throw error
+  });
+};
 // // delete an image from the gallery given its imageId
 // const deleteImage = function (imageId) {
 //   return fetch(`/api/images/${imageId}`, {
@@ -63,6 +111,9 @@ const addUser = function (userData) {
 
 export {
   addUser,
+  signIn,
+  signOut,
+  getMe
   // deleteImage,
   // getImages,
   // addComment,

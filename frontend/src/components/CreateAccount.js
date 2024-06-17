@@ -1,12 +1,13 @@
 import { Grid, TextField, Button } from "@mui/material";
 import InputMask from "react-input-mask";
 
-function CreateAccount({fields, emergencyFields, handleSubmission}) {
+function CreateAccount({fields, emergencyFields, handleSubmission, error}) {
 
 return(
 
   <>
     <h1 className=" pl-14 pt-14 pb-4 text-2xl">Personal Information</h1>
+    <p className=" pl-14 pb-4 text-red-700">{error}</p>
     <Grid container spacing={2} className="pl-14 pr-14 pb-14">
       {fields.map((field) => (
         <Grid item xs={field.size} key={field.label}>

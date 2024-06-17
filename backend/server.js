@@ -4,10 +4,21 @@ const express = require('express')
 const mongoose = require('mongoose')
 const userRoutes = require('./routes/userRoutes')
 const teamRoutes = require('./routes/teamRoutes')
+const session = require("express-session");
 const cors =require('cors');
 
 // express app
 const app = express()
+
+
+app.use(session({
+  secret: "test",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+      maxAge: 600 * 1000
+  }
+}));
 
 // middleware
 app.use(express.json())
@@ -20,6 +31,7 @@ app.use((req, res, next) => {
   console.log(req.path, req.method)
   next()
 })
+
 
 const mongoUri = process.env.MONGODB_URI;
 

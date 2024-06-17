@@ -1,54 +1,56 @@
-import { useEffect, useState } from "react";
-import { Button, Container, Grid,Card } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Button, Container, Grid, Card, Typography, Box } from "@mui/material";
+import { Link } from "react-router-dom";
 import { experienceMapping } from "../../Mappings/experienceLevel";
 import { getTeams } from "../../api/teamService";
-import { Link } from "react-router-dom";
+import "tailwindcss/tailwind.css";
 
 function Teams() {
-
-  const [teams, SetTeams] = useState([]);
+  const [teams, setTeams] = useState([]);
 
   useEffect(() => {
-    getTeams().then((response) =>{
-      SetTeams(response);
-    })
-  }, [])
-
-
+    getTeams().then((response) => {
+      setTeams(response);
+    });
+  }, []);
 
   return (
-    <Container maxWidth>
-      <h1 className="page-title">Teams</h1>
-      <Grid>
-          
-     
-        {Object.entries(experienceMapping).map(([key, value]) => {
-          return (
-            <Card elevation={10} className="mb-4 p-4">
-            <Grid item xs={12} key={key} >
-              <h1 className="page-header mt-2 pb-4">{value}</h1>
-              <Grid container spacing={4}>
-                {teams.map((team)=>{
-                  if(team.experienceLevel == key){
-                    return (
-                        <Grid item xs={4}>
-                          <Card component={Link} to={`/teams/${team._id}`} sx={{backgroundColor:"#ac1121" }} className="h-auto p-10 flex flex-col justify-center content-center">
-                            <h1 className="text-white">{team.name}</h1>
-                          </Card>
-                        </Grid>
-                    )
-                  } 
-                  else{
-                    return(<></>)
-                  }         
-                })}
-            </Grid>
-          </Grid>
-          </Card>
-          );
-        })}
-      </Grid>
+    <Container maxWidth="xl" className="py-8">
+      <Box className="text-center mb-8">
+        <Typography variant="h2">
+          Teams
+        </Typography>
+      </Box>
+      
+      <Box className="mb-8">
+        {Object.entries(experienceMapping).map(([key, value]) => (
+          <Box key={key} className="mb-8">
+            <Card elevation={10} className="p-4 mb-4 min-h-20">
+              <Typography variant="h3"sx={{marginBottom:"10px"}}>
+                {value}
+              </Typography>
+              <Grid container spacing={2}>
+                {teams
+                  .filter((team) => team.experienceLevel == key)
+                  .map((team) => (
+                    <Grid item xs={6} sm={6} md={4} key={team._id}>
+                      <Card
+                        component={Link}
+                        to={`/teams/${team._id}`}
+                        sx={{ backgroundColor: "#ac1121" }}
+                        className="h-auto p-10 flex flex-col justify-center items-center"
+                      >
+                        <Typography variant="h6" className="text-white text-center">
+                          {team.name}
+                        </Typography>
+                      </Card>
+                    </Grid>
+                  ))}
+              </Grid>
+            </Card>
+          </Box>
+        ))}
+      </Box>
     </Container>
   );
 }
