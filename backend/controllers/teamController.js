@@ -187,7 +187,7 @@ const makeTeamPayment = async (req, res) => {
       product_data: {
         name: "League Membership",
       },
-      unit_amount: 30000
+      unit_amount: 100
     },
     quantity: 1
   }];
