@@ -2,16 +2,18 @@ const mongoose = require('mongoose')
 
 
 const paymentSchema = new mongoose.Schema({
-    payment: {
+    paymentId: {
       type: String,
       required: true,
     },
-    expirenceLevel: {
+    userId: {
       type: String,
       required: true,
     },
+    teamId: {
+      type: String,
+      required: true,
+    }
 });
 
-const Payment = mongoose.model('Payment', paymentSchema);
-
-export default Payment;
+export default mongoose.model('Payment', paymentSchema);

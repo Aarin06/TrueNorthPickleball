@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Button, Container, Grid, Card, Typography, Box } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import { getTeam, getTeamCaptain, getRoster } from "../api/teamService";
+import { getMe, getUserId} from "../api/userService";
+
 import Logo from "../media/logo.png";
 import "tailwindcss/tailwind.css";
 
 function Team() {
   const params = useParams();
+  const user = getUserId();
+
   const [captain, setCaptain] = useState({});
   const [team, setTeam] = useState({});
   const [roster, setRoster] = useState([]);
@@ -23,7 +27,9 @@ function Team() {
         setRoster(res);
       });
     });
+
   }, [params.teamId]);
+
 
   const getStatusStyles = (locked) => ({
     color: locked === 0 ? "green" : "red",
@@ -39,18 +45,18 @@ function Team() {
         <Typography variant="h6" style={getStatusStyles(team.locked)}>
           {team.locked === false ? "Active" : "Inactive"}
         </Typography>
-        {team.locked === true && (
+        {team.locked === true && user && user === captain._id ? (
           <Button
             variant="contained"
             color="primary"
             className="mt-4 w-half"
             component={Link}
-            to="/payment"
-            sx={{fontSize:"25px"}}
+            to="/waiver"
+            sx={{fontSize: "25px"}}
           >
             PAY NOW
           </Button>
-        )}
+        ) : null}
       </Box>
 
       <Grid container spacing={4}>
@@ -82,7 +88,7 @@ function Team() {
 
         <Grid item xs={12}>
           <Card elevation={10} className="p-8 flex flex-col justify-center">
-            <Typography variant="h3" className="mb-4">
+            <Typography variant="h4" className="mb-4">
               Roster:
             </Typography>
             <Grid container spacing={2} className="flex flex-wrap">
@@ -102,7 +108,7 @@ function Team() {
 
         <Grid item xs={12}>
           <Card elevation={10} className="p-8 flex flex-col justify-center">
-            <Typography variant="h3" className="mb-4">
+            <Typography variant="h4" className="mb-4">
               Schedule:
             </Typography>
             <Typography variant="h6">

@@ -7,6 +7,8 @@ import {
   signOut, 
   getMe 
 } from '../controllers/userController.js';
+import { authorize } from '../middleware/auth.js';
+
 
 const router = express.Router();
 
@@ -23,7 +25,7 @@ router.post('/signin', signIn);
 router.get('/signout', signOut);
 
 // GET current user
-router.get('/me', getMe);
+router.get('/me', authorize, getMe);
 
 // GET a single user by ID
 router.get('/:id', getUser);

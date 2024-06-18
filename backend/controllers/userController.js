@@ -1,6 +1,8 @@
 import User from '../models/User.js';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import { authorize } from '../middleware/auth.js'
+import jwt from 'jsonwebtoken';
 
 // Get all users
 const getUsers = async (req, res) => {
@@ -26,20 +28,11 @@ const getUser = async (req, res) => {
 };
 
 // Get the current user based on session
-const getMe = async (req, res) => {
-  if (!req.session) {
-    return res.json(null);
+ const getMe = async (req, res) => {
+  if (!req.user || !req.user.userId) {
+    return res.status(401).json({ error: "User ID not found in request." });
   }
-
-  console.log(req.session);
-
-  const user = await User.findById(req.session.userId);
-
-  if (user === null) {
-    return res.json(null);
-  }
-
-  return res.json({ "username": user.id });
+  res.json({ userId: req.user.userId });
 };
 
 // Create a new user
@@ -48,6 +41,7 @@ const createUser = async (req, res) => {
 
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);
+  const pass = userData.password;
   userData.password = bcrypt.hashSync(userData.password, salt);
 
   try {
@@ -58,7 +52,8 @@ const createUser = async (req, res) => {
     req.session.userId = 1111;
 
     const user = await User.create(userData);
-    res.status(200).json(user);
+    userData.password = pass;
+    res.status(200).json(userData);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -76,18 +71,22 @@ const signIn = async (req, res) => {
     if (!user) {
       return res.status(401).json({ error: "Incorrect username or password." });
     }
-
+    
     const hash = user.password; // Load hash from your password DB.
     const password = userData.password; // This is the password passed in by the user
     const result = bcrypt.compareSync(password, hash);
+    console.log(hash);
+    console.log(password);
+
+    console.log(result);
 
     if (!result) {
       return res.status(401).json({ error: "Incorrect username or password." });
     }
 
-    req.session.userId = user.id;
-    console.log(req.session);
-    res.status(200).json({ userId: user.id });
+    // Returning JSON Web Token (search JWT for more explanation)
+    const token = jwt.sign({ userId: user._id }, "secret-key", { expiresIn: "1h" });
+    res.status(201).json({ response: "User signed in successfully.", token, userId: user._id });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -95,8 +94,7 @@ const signIn = async (req, res) => {
 
 // Sign out a user
 const signOut = async (req, res) => {
-  req.session.userId = "";
-  return res.redirect("/");
+  return res.status(200).json({});
 };
 
 export { 

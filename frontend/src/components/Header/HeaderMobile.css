@@ -11,7 +11,7 @@
 }
 
 .icon {
-  width: 80px;
+  width: 70px;
   justify-self: end;
   z-index: 10;
 }
@@ -25,7 +25,7 @@
 }
 
 .icon {
-  height: 80px;
+  height: 70px;
 }
 
 .bm-burger-button {
@@ -42,7 +42,7 @@
 }
 
 .bm-burger-bars-hover {
-  background: #a90000;
+  background: #dadada;
 }
 
 .bm-cross-button {

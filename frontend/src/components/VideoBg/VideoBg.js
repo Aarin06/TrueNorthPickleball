@@ -13,7 +13,7 @@ function VideoBg() {
       <video src={videoBg} autoPlay loop muted />
       <div className="overlay"></div>
       <div className="content">
-        <h1>Welcome to True North PickleBall.</h1>
+        <h1>Welcome to Northern PickleBall.</h1>
         <Button
           LinkComponent={Link}
           to="/join"

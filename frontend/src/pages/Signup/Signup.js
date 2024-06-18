@@ -272,8 +272,10 @@ function Signup() {
           });
         }
 
-        signIn(responseUser).then((response) =>{
-          navigate('/'); // Navigate to the home page
+        signIn(responseUser).then((res) =>{
+          console.log(res);
+          navigate("/");
+          window.location.reload();
         })
 
       })

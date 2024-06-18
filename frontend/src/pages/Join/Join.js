@@ -48,7 +48,7 @@ function Join() {
           component={Link} 
           to="/signup" 
           variant="contained" 
-          sx={{width:"400px", fontSize:"25px"}}
+          sx={{marginBottom:"10px", fontSize:"25px"}}
         >
           Register Now
         </Button>

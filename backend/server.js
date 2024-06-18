@@ -6,6 +6,7 @@ import teamRoutes from './routes/teamRoutes.js';
 import session from 'express-session';
 import cors from 'cors';
 import stripeLib from 'stripe';
+import jwt from "jsonwebtoken";
 
 const stripeSecret = process.env.STRIPE_SECRET;
 const stripe = stripeLib(stripeSecret);

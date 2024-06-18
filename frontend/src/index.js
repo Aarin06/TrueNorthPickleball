@@ -17,7 +17,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import HeaderMobile from "./components/Header/HeaderMobile";
 import AboutUs from "./pages/AboutUs";
 import Schedule from "./pages/Schedule";
-import { getMe } from "./api/userService";
+import { getMe, getUserId } from "./api/userService";
 import Waiver from "./pages/Waiver";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -38,7 +38,7 @@ const loggedInRouter = createBrowserRouter([
     path: "/",
     element: (
       <Layout>
-        <Team />
+        <Landing />
       </Layout>
     ),
     errorElement: <div>404 not found</div>,
@@ -62,6 +62,15 @@ const loggedInRouter = createBrowserRouter([
     errorElement: <div>404 not found</div>,
   },
   {
+    path: "/teams/:teamId",
+    element: (
+      <Layout>
+        <Team />
+      </Layout>
+    ),
+    errorElement: <div>404 not found</div>,
+  },
+  {
     path: "/schedule",
     element: (
       <Layout>
@@ -70,6 +79,15 @@ const loggedInRouter = createBrowserRouter([
     ),
     errorElement: <div>404 not found</div>,
   },
+  {
+    path: "/waiver",
+    element: (
+      <Layout>
+        <Waiver />
+      </Layout>
+    ),
+    errorElement: <div>404 not found</div>,
+  }
 ]);
 
 
@@ -145,36 +163,30 @@ const router = createBrowserRouter([
       </Layout>
     ),
     errorElement: <div>404 not found</div>,
-  },
-  {
-    path: "/waiver",
-    element: (
-      <Layout>
-        <Waiver />
-      </Layout>
-    ),
-    errorElement: <div>404 not found</div>,
-  },
+  }
 ]);
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const userId = getUserId();
 
-  useEffect(() => {
-    // getMe().then((res) =>{
-    //   if (res){
-    //     setIsLoggedIn(true);
-    //   }
-    //   else{
-    //     setIsLoggedIn(false);
-    //   }
-    // })
-  }, []);
+  // useEffect(() => {
+  //   getMe().then((res) =>{
+  //     if (res){
+  //       setIsLoggedIn(res);
+  //     }
+  //     else{
+  //       setIsLoggedIn(false);
+  //     }
+  //   })
+  //   .catch((err)=>{
+  //     console.log(err)
+  //   })
+  // }, []);
 
   return (
     <ThemeProvider theme={mainTheme}>
-      {/* <RouterProvider router={isLoggedIn ? loggedInRouter : router} /> */}
-      <RouterProvider router={router} />
+      <RouterProvider router={userId ? loggedInRouter : router} />
+      {/* <RouterProvider router={router} /> */}
     </ThemeProvider>
   );
 };

@@ -2,25 +2,28 @@ import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import "./Header.css";
 import Logo from "../../media/logo.png";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import { getMe,signOut } from "../../api/userService";
+import { Link, useNavigate } from "react-router-dom";
+import { signOut,getToken } from "../../api/userService";
 
 function Header() {
 
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
-  // useEffect(()=>{
-  //   getMe().then((res) =>{
-  //     if (res){
-  //       setLoggedIn(true);
-  //     }
-  //   })
-  // }, [])
+  useEffect(()=>{
+    const token = getToken();
+    if (token){
+      setLoggedIn(true);
+    }
+    else{
+      setLoggedIn(false);
+    }
+    }, [])
 
 
-  const signOut = () =>{
-    signOut.then((res) =>{
+  const handleSignOut = () =>{
+    signOut().then((res) =>{
       navigate("/");
+      window.location.reload();
     })
   }
 
@@ -31,7 +34,7 @@ function Header() {
       </Link>
       <div className=" flex mr-auto gap-5">
         <Link to={"/"} className="font-bold">
-          True North Pickleball
+          Northern Pickleball
         </Link>
         <Link to={"/aboutus"}>About Us</Link>
         <Link to={"/schedule"}>Schedule</Link>
@@ -41,7 +44,7 @@ function Header() {
       {loggedIn ? 
       <Button
       variant="contained"
-      onClick={signOut}
+      onClick={handleSignOut}
       sx={{
         backgroundColor: "white",
         marginRight: "30px",
