@@ -25,7 +25,7 @@ app.use(session({
 // middleware
 app.use(express.json());
 app.use(cors({
-  origin: ['https://true-north-pickleball-front.vercel.app', 'https://northernpickleball.ca'],
+  origin: ['https://northernpickleball.ca'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 }));
@@ -34,7 +34,7 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   // Use the origin from the request
-  const allowedOrigins = ['https://true-north-pickleball-front.vercel.app','https://northernpickleball.ca']; // Add other allowed origins if needed
+  const allowedOrigins = ['https://northernpickleball.ca']; // Add other allowed origins if needed
   const origin = req.headers.origin;
   
   if (allowedOrigins.includes(origin)) {

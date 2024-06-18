@@ -39,9 +39,7 @@ const getWaiver = async (req, res) => {
   const waiver = await Waiver.findOne({userId: id});
 
   if (!waiver) {
-    await Waiver.create({userId: id, signed: false});
-
-    // return res.status(404).json({ error: 'No such waiver' });
+    return res.status(404).json({ error: 'No such waiver' });
   }
 
   res.status(200).json(waiver);
@@ -104,8 +102,7 @@ const signWaiver = async (req, res) => {
     }
     const waiver = await Waiver.updateOne(waiverData);
 
-    const finalWaiver = await Waiver.find({userId: userId});
-
+    const finalWaiver = await Waiver.findOne({userId: userId});
     
     res.status(200).json(finalWaiver);
   } catch (error) {
