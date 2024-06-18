@@ -1,12 +1,11 @@
 import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
-import userRoutes from '../routes/userRoutes.js';
-import teamRoutes from '../routes/teamRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import teamRoutes from './routes/teamRoutes.js';
 import session from 'express-session';
 import cors from 'cors';
 import stripeLib from 'stripe';
-import jwt from "jsonwebtoken";
 
 const stripeSecret = process.env.STRIPE_SECRET;
 const stripe = stripeLib(stripeSecret);
