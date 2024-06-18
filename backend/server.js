@@ -7,7 +7,6 @@ import session from 'express-session';
 import cors from 'cors';
 import stripeLib from 'stripe';
 import jwt from "jsonwebtoken";
-import corsHandler from './corsHandler';
 
 const stripeSecret = process.env.STRIPE_SECRET;
 const stripe = stripeLib(stripeSecret);
@@ -31,8 +30,6 @@ app.use(cors({
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 }));
-
-app.use('https://true-north-pickleball-front.vercel.app', corsHandler);
 
 
 
