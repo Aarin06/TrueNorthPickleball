@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import { authorize } from '../middleware/auth.js'
 import jwt from 'jsonwebtoken';
+import Waiver from '../models/Waiver.js';
 
 // Get all users
 const getUsers = async (req, res) => {
@@ -27,12 +28,35 @@ const getUser = async (req, res) => {
   res.status(200).json(user);
 };
 
+// Get a single user by ID
+const getWaiver = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: 'No such waiver' });
+  }
+
+  const waiver = await Waiver.findOne({userId: id});
+
+  if (!waiver) {
+    await Waiver.create({userId: id, signed: false});
+
+    // return res.status(404).json({ error: 'No such waiver' });
+  }
+
+  res.status(200).json(waiver);
+};
+
 // Get the current user based on session
  const getMe = async (req, res) => {
   if (!req.user || !req.user.userId) {
     return res.status(401).json({ error: "User ID not found in request." });
   }
-  res.json({ userId: req.user.userId });
+
+  const user = await User.findById(req.user.userId);
+
+
+  res.json(user);
 };
 
 // Create a new user
@@ -49,11 +73,41 @@ const createUser = async (req, res) => {
     if (exists) {
       return res.status(422).json({ message: "This Email is taken." });
     }
-    req.session.userId = 1111;
 
     const user = await User.create(userData);
-    userData.password = pass;
-    res.status(200).json(userData);
+    const waiverData = {
+      userId:user._id,
+      signed: false
+    }
+    
+    await Waiver.create(waiverData);
+    
+    user.password = pass;
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const signWaiver = async (req, res) => {
+  const { userId } = req.body;
+
+
+  try {
+    const exists = await User.findOne({ _id: userId });
+    if (!exists) {
+      return res.status(422).json({ message: "Unable to sign waiver" });
+    }
+    const waiverData = {
+      userId:userId,
+      signed: true
+    }
+    const waiver = await Waiver.updateOne(waiverData);
+
+    const finalWaiver = await Waiver.find({userId: userId});
+
+    
+    res.status(200).json(finalWaiver);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -69,7 +123,7 @@ const signIn = async (req, res) => {
     const user = await User.findOne({ email: userData.email });
 
     if (!user) {
-      return res.status(401).json({ error: "Incorrect username or password." });
+      return res.status(401).json({ message: "Incorrect username or password." });
     }
     
     const hash = user.password; // Load hash from your password DB.
@@ -81,7 +135,7 @@ const signIn = async (req, res) => {
     console.log(result);
 
     if (!result) {
-      return res.status(401).json({ error: "Incorrect username or password." });
+      return res.status(401).json({ message: "Incorrect username or password." });
     }
 
     // Returning JSON Web Token (search JWT for more explanation)
@@ -103,5 +157,7 @@ export {
   createUser, 
   signIn, 
   signOut, 
-  getMe 
+  getMe,
+  signWaiver,
+  getWaiver 
 };

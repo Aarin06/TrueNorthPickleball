@@ -1,9 +1,9 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose';
 
 
 const paymentSchema = new mongoose.Schema({
-    paymentId: {
-      type: String,
+    status: {
+      type: Boolean,
       required: true,
     },
     userId: {
@@ -14,6 +14,6 @@ const paymentSchema = new mongoose.Schema({
       type: String,
       required: true,
     }
-});
+  }, { timestamps: true });
 
 export default mongoose.model('Payment', paymentSchema);

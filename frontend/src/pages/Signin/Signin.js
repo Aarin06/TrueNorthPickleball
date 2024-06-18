@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 function Signin() {
   const navigate = useNavigate();
-
+  const [error, setError] = useState("");
   const [fields, setFields] = useState([
     {
       label: "Email",
@@ -66,6 +66,9 @@ function Signin() {
         navigate("/");
         window.location.reload();
       })
+      .catch((err) =>{
+        setError(err.response.data.message || "")
+      })
     }
   };
 
@@ -74,12 +77,18 @@ function Signin() {
       <Card sx={{ width: "350px" }}>
         <div className="content-center">
           <img className="max-w-44" src={Logo} alt="logo" />
+          <p className=" text-red-700 text-sm">{error}</p>
           {fields.map((field) => (
             <TextField
               key={field.label}
               className="w-full"
               color="secondary"
               label={field.label}
+              type={
+                field.label === "Password"
+                  ? "password"
+                  : "text"
+              }
               onChange={(e) => field.change(e.target.value)}
               helperText={field.helperText}
               error={field.error}

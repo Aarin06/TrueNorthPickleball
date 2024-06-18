@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Grid, Card, Typography, Box } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
-import { getTeam, getTeamCaptain, getRoster } from "../api/teamService";
+import { getTeam, getTeamCaptain, getRoster, getPayment } from "../api/teamService";
 import { getMe, getUserId} from "../api/userService";
 
 import Logo from "../media/logo.png";
@@ -10,7 +10,8 @@ import "tailwindcss/tailwind.css";
 function Team() {
   const params = useParams();
   const user = getUserId();
-
+  const [joined, setJoined] = useState(false); 
+  const [payment, setPayment] = useState({}); 
   const [captain, setCaptain] = useState({});
   const [team, setTeam] = useState({});
   const [roster, setRoster] = useState([]);
@@ -23,16 +24,28 @@ function Team() {
         setCaptain(res);
       });
 
+      getPayment(params.teamId).then((res) =>{
+        console.log(res)
+        setPayment(res);
+      }).catch((err) =>{
+        setPayment({status:false})
+      })
+
       getRoster(params.teamId).then((res) => {
         setRoster(res);
+        res.map((player) =>{
+          if (player._id === user){
+            setJoined(true);
+          }
+        })
       });
     });
 
   }, [params.teamId]);
 
 
-  const getStatusStyles = (locked) => ({
-    color: locked === 0 ? "green" : "red",
+  const getStatusStyles = (locked, payment) => ({
+    color: locked === 0 || payment ? "green" : "red",
     fontWeight: "bold",
   });
 
@@ -42,16 +55,16 @@ function Team() {
         <Typography variant="h2" className="text-4xl font-bold mb-4">
           {team.name}
         </Typography>
-        <Typography variant="h6" style={getStatusStyles(team.locked)}>
-          {team.locked === false ? "Active" : "Inactive"}
+        <Typography variant="h6" style={getStatusStyles(team.locked, payment.status)}>
+          {team.locked === false || payment.status ? "Active" : "Inactive"}
         </Typography>
-        {team.locked === true && user && user === captain._id ? (
+        {team.locked === true && user && user === captain._id && !payment.status? (
           <Button
             variant="contained"
             color="primary"
             className="mt-4 w-half"
             component={Link}
-            to="/waiver"
+            to={`/waiver?teamId=${team._id}`}
             sx={{fontSize: "25px"}}
           >
             PAY NOW
@@ -73,7 +86,7 @@ function Team() {
         <Grid item xs={12} md={4}>
           <Card elevation={10} className="h-full flex items-center justify-center">
             <Button
-              disabled={team.playerCount === 4}
+              disabled={team.playerCount === 4 || user}
               component={Link}
               to="/signup"
               className="h-full w-full flex justify-center items-center text-center"
@@ -81,14 +94,14 @@ function Team() {
               color="primary"
               sx={{fontSize:"25px"}}
             >
-              {team.playerCount !== 4 ? "Join Team" : "Full"}
+              {joined ? "Joined" : team.playerCount !== 4 ? "Join Team" : "Full"}
             </Button>
           </Card>
         </Grid>
 
         <Grid item xs={12}>
           <Card elevation={10} className="p-8 flex flex-col justify-center">
-            <Typography variant="h4" className="mb-4">
+            <Typography variant="h4" sx={{marginBottom:"10px"}}>
               Roster:
             </Typography>
             <Grid container spacing={2} className="flex flex-wrap">

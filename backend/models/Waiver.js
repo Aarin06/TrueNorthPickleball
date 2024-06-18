@@ -1,5 +1,4 @@
-const mongoose = require('mongoose')
-
+import mongoose from 'mongoose';
 
 const waiverSchema = new mongoose.Schema({
     userId: {
@@ -10,6 +9,6 @@ const waiverSchema = new mongoose.Schema({
       type: Boolean,
       required: true,
     }
-});
+  }, { timestamps: true });
 
 export default mongoose.model('Waiver', waiverSchema);

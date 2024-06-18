@@ -19,6 +19,8 @@ import AboutUs from "./pages/AboutUs";
 import Schedule from "./pages/Schedule";
 import { getMe, getUserId } from "./api/userService";
 import Waiver from "./pages/Waiver";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentFailure from "./pages/PaymentFailure";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 
@@ -84,6 +86,24 @@ const loggedInRouter = createBrowserRouter([
     element: (
       <Layout>
         <Waiver />
+      </Layout>
+    ),
+    errorElement: <div>404 not found</div>,
+  },
+  {
+    path: "/success",
+    element: (
+      <Layout>
+        <PaymentSuccess />
+      </Layout>
+    ),
+    errorElement: <div>404 not found</div>,
+  },
+  {
+    path: "/failure",
+    element: (
+      <Layout>
+        <PaymentFailure />
       </Layout>
     ),
     errorElement: <div>404 not found</div>,

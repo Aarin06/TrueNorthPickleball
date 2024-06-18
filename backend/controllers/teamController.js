@@ -4,6 +4,7 @@ import User from '../models/User.js';
 import TeamMember from '../models/TeamMember.js';
 import mongoose from 'mongoose';
 import stripeLib from 'stripe';
+import Payment from '../models/Payment.js';
 
 const stripeSecret = process.env.STRIPE_SECRET;
 const stripe = stripeLib(stripeSecret);
@@ -30,6 +31,23 @@ const getTeam = async (req, res) => {
   }
 
   res.status(200).json(team);
+};
+
+// get a single workout
+const getPayment = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: 'No such team' });
+  }
+
+  const payment = await Payment.findOne({teamId: id});
+
+  if (!payment) {
+    return res.status(404).json({ error: 'No such team' });
+  }
+
+  res.status(200).json(payment);
 };
 
 const getTeamCaptain = async (req, res) => {
@@ -102,7 +120,7 @@ const createTeam = async (req, res) => {
 
     await TeamMember.create({ teamId: team.id, userId: teamData.captain });
 
-    res.status(200).json(teamData);
+    res.status(200).json(team);
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error.message });
@@ -151,7 +169,7 @@ const joinTeam = async (req, res) => {
     team.playerCount += 1;
     
     await Team.findOneAndUpdate({ _id: team.id }, team);
-    res.status(200).json(teamMember);
+    res.status(200).json(team);
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error.message });
@@ -159,7 +177,9 @@ const joinTeam = async (req, res) => {
 };
 
 const makeTeamPayment = async (req, res) => {
-  console.log("ssss");
+  const { userId, teamId } = req.body;
+
+  console.log("help",req.body)
 
   const lineItems = [{
     price_data: {
@@ -176,13 +196,26 @@ const makeTeamPayment = async (req, res) => {
     payment_method_types: ["card"],
     line_items: lineItems,
     mode: "payment",
-    success_url: "https://example.com/success",
-    cancel_url: "https://example.com/cancel"
+    success_url: `http://localhost:3000/success?teamId=${teamId}&userId=${userId}`,
+    cancel_url: `http://localhost:3000/failure?teamId=${teamId}&userId=${userId}`
   });
 
   console.log(session);
 
   res.json({ id: session.id });
+};
+
+const handlePostPayment = async (req, res) => {
+  const { userId, teamId, status } = req.body;
+
+  try {
+    const payment = await Payment.create({userId, teamId, status});
+
+    res.status(200).json(payment);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error: error.message });
+  }
 };
 
 export { 
@@ -193,5 +226,7 @@ export {
   joinTeam, 
   getTeamCaptain, 
   getRoster, 
-  makeTeamPayment 
+  makeTeamPayment,
+  handlePostPayment,
+  getPayment
 };

@@ -265,18 +265,24 @@ function Signup() {
         if (create) {
           addTeam(teamData).then((responseTeam) => {
             console.log(responseTeam);
+            signIn(responseUser).then((res) =>{
+              console.log(res);
+              navigate(`/waiver?teamId=${responseTeam._id}`);
+              window.location.reload();
+            })
           });
         } else {
           joinTeam(team[0].value, responseUser.userId).then((responseTeam) => {
             console.log(responseTeam);
+            signIn(responseUser).then((res) =>{
+              console.log(res);
+              navigate(`/waiver?teamId=${responseTeam._id}`);
+              window.location.reload();
+            })
           });
         }
 
-        signIn(responseUser).then((res) =>{
-          console.log(res);
-          navigate("/");
-          window.location.reload();
-        })
+      
 
       })
       .catch((error) => {

@@ -5,7 +5,9 @@ import {
   createUser, 
   signIn, 
   signOut, 
-  getMe 
+  getMe,
+  signWaiver,
+  getWaiver
 } from '../controllers/userController.js';
 import { authorize } from '../middleware/auth.js';
 
@@ -17,6 +19,11 @@ router.get('/', getUsers);
 
 // POST a new user
 router.post('/', createUser);
+
+// POST to sign in
+router.post('/waiver', signWaiver);
+// POST to sign in
+router.get('/waiver/:id', getWaiver);
 
 // POST to sign in
 router.post('/signin', signIn);

@@ -35,6 +35,15 @@ const getTeam = function (teamId) {
     });
 };
 
+const getPayment = function (teamId) {
+  return axios.get(SERVER_URL + `/api/teams/${teamId}/payment`)
+    .then((res) => res.data)
+    .catch((error) => {
+      console.error('There was a problem with the axios operation:', error);
+      throw error;
+    });
+};
+
 const getTeamCaptain = function (teamId) {
   return axios.get(SERVER_URL + `/api/teams/${teamId}/captain`)
     .then((res) => res.data)
@@ -52,10 +61,20 @@ const getRoster = function (teamId) {
 };
 
 const makeTeamPayment = function (teamId, userId) {
-  return axios.post(SERVER_URL + "/api/teams/payment", { teamId: teamId, userId: userId })
+  return axios.post(`${SERVER_URL}/api/teams/payment`, { teamId, userId })
     .then((res) => res.data)
     .catch((error) => {
       console.error('There was a problem with the axios operation:', error);
+      throw error; // Re-throw the error to allow further handling if needed
+    });
+};
+
+const handlePostPayment = function (teamId, userId, status) {
+  return axios.post(`${SERVER_URL}/api/teams/postpayment`, { teamId, userId, status })
+    .then((res) => res.data)
+    .catch((error) => {
+      console.error('There was a problem with the axios operation:', error);
+      throw error; // Re-throw the error to allow further handling if needed
     });
 };
 
@@ -66,5 +85,7 @@ export {
   getTeam,
   getTeamCaptain,
   getRoster,
-  makeTeamPayment
+  makeTeamPayment,
+  handlePostPayment,
+  getPayment
 };

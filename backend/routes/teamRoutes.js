@@ -7,7 +7,9 @@ import {
   joinTeam, 
   getTeamCaptain, 
   getRoster, 
-  makeTeamPayment 
+  makeTeamPayment,
+  handlePostPayment,
+  getPayment
 } from '../controllers/teamController.js';
 
 const router = express.Router();
@@ -22,10 +24,16 @@ router.post('/', createTeam);
 router.post('/payment', makeTeamPayment);
 
 // POST a new workout
+router.post('/postpayment', handlePostPayment);
+
+// POST a new workout
 router.post('/join', joinTeam);
 
 // GET a single workout
 router.get('/:id', getTeam);
+
+// GET a single workout
+router.get('/:id/payment', getPayment);
 
 // UPDATE a workout
 router.patch('/:id', updateTeam);

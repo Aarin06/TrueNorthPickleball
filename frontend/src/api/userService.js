@@ -23,6 +23,32 @@ const addUser = async (userData) => {
   }
 };
 
+// Add a user function
+const signWaiver = async (userId) => {
+  try {
+    const token = getToken();
+    if (!token) {
+      throw new Error('No token found');
+    }
+    const response = await axios.post(`${SERVER_URL}/api/users/waiver`, { userId });
+    return response.data;
+  } catch (error) {
+    console.error(error.message);
+    throw error;
+  }
+};
+
+// Get current user function
+const getWaiver = async () => {
+  try {
+    const response = await axios.get(`${SERVER_URL}/api/users/waiver/${getUserId()}`, { withCredentials: true });
+    return response.data;
+  } catch (error) {
+    console.error('There was a problem with the axios operation:', error);
+    throw error;
+  }
+};
+
 // Sign in function
 const signIn = async (userData) => {
   try {
@@ -81,5 +107,7 @@ export {
   signOut,
   getMe,
   getToken,
-  getUserId
+  getUserId,
+  signWaiver,
+  getWaiver
 };
