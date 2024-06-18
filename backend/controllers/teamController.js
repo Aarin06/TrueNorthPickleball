@@ -196,8 +196,8 @@ const makeTeamPayment = async (req, res) => {
     payment_method_types: ["card"],
     line_items: lineItems,
     mode: "payment",
-    success_url: `https://true-north-pickleball-front.vercel.app/success?teamId=${teamId}&userId=${userId}`,
-    cancel_url: `https://true-north-pickleball-front.vercel.app/failure?teamId=${teamId}&userId=${userId}`
+    success_url: `http://true-north-pickleball-front.vercel.app/success?teamId=${teamId}&userId=${userId}`,
+    cancel_url: `http://true-north-pickleball-front.vercel.app/failure?teamId=${teamId}&userId=${userId}`
   });
 
   console.log(session);

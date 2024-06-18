@@ -26,12 +26,10 @@ app.use(session({
 // middleware
 app.use(express.json());
 app.use(cors({
-  origin: 'https://true-north-pickleball-front.vercel.app',
+  origin: 'http://true-north-pickleball-front.vercel.app',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 }));
-app.options('*', cors()); // This will enable CORS pre-flight requests
-
 
 
 app.use((req, res, next) => {
