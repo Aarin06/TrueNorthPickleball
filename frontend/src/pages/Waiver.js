@@ -108,7 +108,7 @@ function Waiver() {
           color="primary" 
           className="w-full" 
           sx={{ marginBottom: "10px" }} 
-          disabled={!checks.every(check => check.value)}
+          disabled={!checks.every(check => check.value) || waiverSigned}
         >
           Sign Waiver
         </Button>
