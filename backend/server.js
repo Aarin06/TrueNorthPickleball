@@ -1,17 +1,17 @@
-require('dotenv').config()
-
-const express = require('express')
-const mongoose = require('mongoose')
-const userRoutes = require('./routes/userRoutes')
-const teamRoutes = require('./routes/teamRoutes')
-const session = require("express-session");
-const cors =require('cors');
+import 'dotenv/config';
+import express from 'express';
+import mongoose from 'mongoose';
+import userRoutes from './routes/userRoutes.js';
+import teamRoutes from './routes/teamRoutes.js';
+import session from 'express-session';
+import cors from 'cors';
+import stripeLib from 'stripe';
 
 const stripeSecret = process.env.STRIPE_SECRET;
-const stripe = require("stripe")(stripeSecret)
-// express app
-const app = express()
+const stripe = stripeLib(stripeSecret);
 
+// express app
+const app = express();
 
 app.use(session({
   secret: "test",
@@ -23,17 +23,17 @@ app.use(session({
 }));
 
 // middleware
-app.use(express.json())
+app.use(express.json());
 app.use(cors({
   origin: 'http://localhost:3000',
-  credentials: true
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
 }));
 
 app.use((req, res, next) => {
-  console.log(req.path, req.method)
-  next()
-})
-
+  console.log(req.path, req.method);
+  next();
+});
 
 const mongoUri = process.env.MONGODB_URI;
 
@@ -48,12 +48,12 @@ app.use('/api/teams', teamRoutes);
 // connect to db
 mongoose.connect(mongoUri)
   .then(() => {
-    console.log('connected to database')
+    console.log('connected to database');
     // listen to port
     app.listen(process.env.PORT, () => {
-      console.log('listening for requests on port', process.env.PORT)
-    })
+      console.log('listening for requests on port', process.env.PORT);
+    });
   })
   .catch((err) => {
-    console.log(err)
-  }) 
+    console.log(err);
+  });

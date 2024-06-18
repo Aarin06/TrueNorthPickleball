@@ -5,14 +5,13 @@ import { Link } from "react-router-dom";
 import { signIn } from "../../api/userService";
 import { useNavigate } from "react-router-dom";
 
-
 function Signin() {
   const navigate = useNavigate();
 
   const [fields, setFields] = useState([
     {
       label: "Email",
-      key:"email",
+      key: "email",
       value: "",
       helperText: "",
       error: false,
@@ -20,7 +19,7 @@ function Signin() {
     },
     {
       label: "Password",
-      key:"password",
+      key: "password",
       value: "",
       helperText: "",
       error: false,
@@ -33,12 +32,13 @@ function Signin() {
       prevFields.map((field) =>
         field.label === label
           ? { ...field, value, helperText: "", error: false }
-          : field,
-      ),
+          : field
+      )
     );
   };
+
   const handleSubmission = () => {
-    console.log(fields)
+    console.log(fields);
     let allFieldsValid = true;
     const updatedFields = fields.map((field) => {
       if (field.value.trim() === "") {
@@ -54,16 +54,19 @@ function Signin() {
     setFields(updatedFields);
 
     if (allFieldsValid) {
-      let userData = fields;
-
-      userData = userData.reduce((acc, field) => {
+      const userData = fields.reduce((acc, field) => {
         acc[field.key] = field.value;
         return acc;
       }, {});
 
-      signIn(userData).then((res) =>{
-        navigate("/");
-      })
+      signIn(userData)
+        .then((res) => {
+          navigate("/");
+        })
+        .catch((error) => {
+          console.error('Sign in failed', error);
+          // You can handle more specific error messaging here if needed
+        });
     }
   };
 
@@ -78,6 +81,7 @@ function Signin() {
               className="w-full"
               color="secondary"
               label={field.label}
+              type={field.label.toLowerCase() === "password" ? "password" : "text"}
               onChange={(e) => field.change(e.target.value)}
               helperText={field.helperText}
               error={field.error}
@@ -91,7 +95,6 @@ function Signin() {
             Sign In
           </Button>
           <div className="flex w-full">
-            {/* <p className="font-medium">Forgot Password?</p> */}
             <Link to="/join" className="ml-auto font-medium">
               Join Now
             </Link>

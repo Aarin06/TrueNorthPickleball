@@ -1,14 +1,29 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import "./Header.css";
 import Logo from "../../media/logo.png";
-import { Link } from "react-router-dom";
-
-const click = () => {
-  console.log("here");
-};
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { getMe,signOut } from "../../api/userService";
 
 function Header() {
+
+  const [loggedIn, setLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  // useEffect(()=>{
+  //   getMe().then((res) =>{
+  //     if (res){
+  //       setLoggedIn(true);
+  //     }
+  //   })
+  // }, [])
+
+
+  const signOut = () =>{
+    signOut.then((res) =>{
+      navigate("/");
+    })
+  }
+
   return (
     <div className="header">
       <Link to={"/"} className="font-bold">
@@ -23,7 +38,25 @@ function Header() {
         <Link to={"/teams"}>Teams</Link>
       </div>
 
+      {loggedIn ? 
       <Button
+      variant="contained"
+      onClick={signOut}
+      sx={{
+        backgroundColor: "white",
+        marginRight: "30px",
+        zIndex: "20",
+        borderRadius: "25px",
+        color: "black",
+        "&:hover": {
+          backgroundColor: "#DEE4EA", // Change background color to grey on hover
+        },
+      }}
+    >
+      Sign Out
+    </Button>
+    : 
+    <Button
         variant="contained"
         LinkComponent={Link}
         to="/signin"
@@ -40,6 +73,7 @@ function Header() {
       >
         Sign In
       </Button>
+      }
     </div>
   );
 }

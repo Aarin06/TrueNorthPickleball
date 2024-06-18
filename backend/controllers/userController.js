@@ -1,48 +1,48 @@
-const User = require('../models/User')
-const mongoose = require('mongoose')
-const bcrypt = require ("bcrypt");
+import User from '../models/User.js';
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
-// get all workouts
+// Get all users
 const getUsers = async (req, res) => {
-  const users = await User.find({}).sort({createdAt: -1})
+  const users = await User.find({}).sort({ createdAt: -1 });
+  res.status(200).json(users);
+};
 
-  res.status(200).json(users)
-}
-
-// get a single workout
+// Get a single user by ID
 const getUser = async (req, res) => {
-  const { id } = req.params
+  const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({error: 'No such user'})
+    return res.status(404).json({ error: 'No such user' });
   }
 
-  const user = await User.findById(id)
+  const user = await User.findById(id);
 
   if (!user) {
-    return res.status(404).json({error: 'No such user'})
+    return res.status(404).json({ error: 'No such user' });
   }
 
-  res.status(200).json(user)
-}
+  res.status(200).json(user);
+};
 
-// get a single workout
+// Get the current user based on session
 const getMe = async (req, res) => {
-  if (!req.session){
+  if (!req.session) {
     return res.json(null);
   }
-  
+
   console.log(req.session);
-  
+
   const user = await User.findById(req.session.userId);
 
   if (user === null) {
     return res.json(null);
   }
 
-  return res.json({"username":user.id});
-}
+  return res.json({ "username": user.id });
+};
 
+// Create a new user
 const createUser = async (req, res) => {
   const { userData } = req.body;
 
@@ -64,86 +64,46 @@ const createUser = async (req, res) => {
   }
 };
 
-
+// Sign in a user
 const signIn = async (req, res) => {
-  const { userData } = req.body
+  const { userData } = req.body;
 
   try {
+    console.log(userData);
 
-    console.log(userData)
-    
-    const user = await User.findOne({email: userData.email});
+    const user = await User.findOne({ email: userData.email });
 
     if (!user) {
       return res.status(401).json({ error: "Incorrect username or password." });
     }
 
     const hash = user.password; // Load hash from your password DB.
-    const password = userData.password; // this is the password passed in by the user
+    const password = userData.password; // This is the password passed in by the user
     const result = bcrypt.compareSync(password, hash);
 
     if (!result) {
       return res.status(401).json({ error: "Incorrect username or password." });
     }
-    
+
     req.session.userId = user.id;
-    console.log(req.session)
-    res.status(200).json({userId:user.id});
+    console.log(req.session);
+    res.status(200).json({ userId: user.id });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
-}
+};
 
-
+// Sign out a user
 const signOut = async (req, res) => {
   req.session.userId = "";
-
   return res.redirect("/");
-}
+};
 
-// // delete a workout
-// const deleteWorkout = async (req, res) => {
-//   const { id } = req.params
-
-//   if (!mongoose.Types.ObjectId.isValid(id)) {
-//     return res.status(400).json({error: 'No such workout'})
-//   }
-
-//   const workout = await Workout.findOneAndDelete({_id: id})
-
-//   if(!workout) {
-//     return res.status(400).json({error: 'No such workout'})
-//   }
-
-//   res.status(200).json(workout)
-// }
-
-// // update a workout
-// const updateWorkout = async (req, res) => {
-//   const { id } = req.params
-
-//   if (!mongoose.Types.ObjectId.isValid(id)) {
-//     return res.status(400).json({error: 'No such workout'})
-//   }
-
-//   const workout = await Workout.findOneAndUpdate({_id: id}, {
-//     ...req.body
-//   })
-
-//   if (!workout) {
-//     return res.status(400).json({error: 'No such workout'})
-//   }
-
-//   res.status(200).json(workout)
-// }
-
-module.exports = {
-  getUsers,
-  getUser,
-  createUser,
-  signIn,
-  signOut,
-  getMe
-  // deleteWorkout,
-  // updateWorkout
-}
+export { 
+  getUsers, 
+  getUser, 
+  createUser, 
+  signIn, 
+  signOut, 
+  getMe 
+};

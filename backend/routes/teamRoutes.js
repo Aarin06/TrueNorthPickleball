@@ -1,43 +1,39 @@
-
-const express = require('express')
-const {
+import express from 'express';
+import { 
   getTeam, 
   getTeams, 
-  createTeam,  
-  updateTeam,
-  joinTeam,
-  getTeamCaptain,
-  getRoster,
-  makeTeamPayment
-} = require('../controllers/teamController')
+  createTeam, 
+  updateTeam, 
+  joinTeam, 
+  getTeamCaptain, 
+  getRoster, 
+  makeTeamPayment 
+} from '../controllers/teamController.js';
 
-const router = express.Router()
+const router = express.Router();
 
 // GET all workouts
-router.get('/', getTeams)
+router.get('/', getTeams);
 
 // POST a new workout
-router.post('/', createTeam)
+router.post('/', createTeam);
 
 // POST a new workout
-router.post('/payment', makeTeamPayment)
+router.post('/payment', makeTeamPayment);
 
 // POST a new workout
-router.post('/join', joinTeam)
+router.post('/join', joinTeam);
 
 // GET a single workout
-router.get('/:id', getTeam)
+router.get('/:id', getTeam);
 
 // UPDATE a workout
-router.patch('/:id', updateTeam)
+router.patch('/:id', updateTeam);
 
 // POST a new workout
-router.get('/:id/captain', getTeamCaptain)
-
+router.get('/:id/captain', getTeamCaptain);
 
 // POST a new workout
-router.get('/:id/roster', getRoster)
+router.get('/:id/roster', getRoster);
 
-
-
-module.exports = router
+export default router;
