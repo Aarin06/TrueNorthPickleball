@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Define the server URL
-const SERVER_URL = "http://localhost:4000";
+const SERVER_URL = "true-north-pickleball-qh2hu5bbf-aarin06s-projects.vercel.app";
 
 // Set axios to include credentials in requests
 axios.defaults.withCredentials = true;
