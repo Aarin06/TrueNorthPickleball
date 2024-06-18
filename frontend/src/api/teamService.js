@@ -1,5 +1,5 @@
 import axios from 'axios';  // Ensure axios is imported correctly
-const SERVER_URL = "true-north-pickleball-qh2hu5bbf-aarin06s-projects.vercel.app";
+const SERVER_URL = "https://true-north-pickleball.vercel.app/";
 axios.defaults.withCredentials = true;
 
 const addTeam = function (teamData) {
