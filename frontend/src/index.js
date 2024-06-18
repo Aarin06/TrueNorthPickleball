@@ -21,6 +21,8 @@ import { getMe, getUserId } from "./api/userService";
 import Waiver from "./pages/Waiver";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailure from "./pages/PaymentFailure";
+import Error from "./pages/Error";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 
@@ -43,7 +45,10 @@ const loggedInRouter = createBrowserRouter([
         <Landing />
       </Layout>
     ),
-    errorElement: <div>404 not found</div>,
+    errorElement: 
+    <Layout>
+      <Error />
+    </Layout>,
   },
   {
     path: "/aboutus",
@@ -51,8 +56,7 @@ const loggedInRouter = createBrowserRouter([
       <Layout>
         <AboutUs />
       </Layout>
-    ),
-    errorElement: <div>404 not found</div>,
+    )
   },
   {
     path: "/teams",
@@ -60,8 +64,7 @@ const loggedInRouter = createBrowserRouter([
       <Layout>
         <Teams />
       </Layout>
-    ),
-    errorElement: <div>404 not found</div>,
+    )
   },
   {
     path: "/teams/:teamId",
@@ -69,8 +72,7 @@ const loggedInRouter = createBrowserRouter([
       <Layout>
         <Team />
       </Layout>
-    ),
-    errorElement: <div>404 not found</div>,
+    )
   },
   {
     path: "/schedule",
@@ -78,8 +80,7 @@ const loggedInRouter = createBrowserRouter([
       <Layout>
         <Schedule />
       </Layout>
-    ),
-    errorElement: <div>404 not found</div>,
+    )
   },
   {
     path: "/waiver",
@@ -87,8 +88,7 @@ const loggedInRouter = createBrowserRouter([
       <Layout>
         <Waiver />
       </Layout>
-    ),
-    errorElement: <div>404 not found</div>,
+    )
   },
   {
     path: "/success",
@@ -96,8 +96,7 @@ const loggedInRouter = createBrowserRouter([
       <Layout>
         <PaymentSuccess />
       </Layout>
-    ),
-    errorElement: <div>404 not found</div>,
+    )
   },
   {
     path: "/failure",
@@ -105,8 +104,7 @@ const loggedInRouter = createBrowserRouter([
       <Layout>
         <PaymentFailure />
       </Layout>
-    ),
-    errorElement: <div>404 not found</div>,
+    )
   }
 ]);
 
@@ -119,7 +117,10 @@ const router = createBrowserRouter([
         <Landing />
       </Layout>
     ),
-    errorElement: <div>404 not found</div>,
+    errorElement: 
+    <Layout>
+      <Error />
+    </Layout>,
   },
   {
     path: "/signup",
@@ -127,8 +128,7 @@ const router = createBrowserRouter([
       <Layout>
         <Signup />
       </Layout>
-    ),
-    errorElement: <div>404 not found</div>,
+    )
   },
   {
     path: "/signin",
@@ -136,8 +136,7 @@ const router = createBrowserRouter([
       <Layout>
         <Signin />
       </Layout>
-    ),
-    errorElement: <div>404 not found</div>,
+    )
   },
   {
     path: "/aboutus",
@@ -145,8 +144,7 @@ const router = createBrowserRouter([
       <Layout>
         <AboutUs />
       </Layout>
-    ),
-    errorElement: <div>404 not found</div>,
+    )
   },
   {
     path: "/teams",
@@ -154,8 +152,7 @@ const router = createBrowserRouter([
       <Layout>
         <Teams />
       </Layout>
-    ),
-    errorElement: <div>404 not found</div>,
+    )
   },
   {
     path: "/teams/:teamId",
@@ -163,8 +160,7 @@ const router = createBrowserRouter([
       <Layout>
         <Team />
       </Layout>
-    ),
-    errorElement: <div>404 not found</div>,
+    )
   },
   {
     path: "/schedule",
@@ -172,8 +168,7 @@ const router = createBrowserRouter([
       <Layout>
         <Schedule />
       </Layout>
-    ),
-    errorElement: <div>404 not found</div>,
+    )
   },
   {
     path: "/join",
@@ -181,8 +176,7 @@ const router = createBrowserRouter([
       <Layout>
         <Join />
       </Layout>
-    ),
-    errorElement: <div>404 not found</div>,
+    )
   }
 ]);
 

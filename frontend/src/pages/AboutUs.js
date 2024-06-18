@@ -80,18 +80,14 @@ function AboutUs() {
       </Box>
       
       <Box className="mb-16">
-        <Typography variant="h3" className="text-3xl font-semibold mb-4">
-          Where to Play
-        </Typography>
-        <br></br>
         <Typography variant="body1">
-         In Partnership,
+         In Partnership with,
         </Typography>
         <img className="w-96" src={Fairgrounds} alt="logo" />
-       
+        
       </Box>
       
-      <Box className="mb-16">
+      {/* <Box className="mb-16">
         <Typography variant="h3" className="text-3xl font-semibold mb-4">
           Pickleball in Action
         </Typography>
@@ -118,7 +114,7 @@ function AboutUs() {
             />
           </Grid>
         </Grid>
-      </Box>
+      </Box> */}
       
     </Container>
   );

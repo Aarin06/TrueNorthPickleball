@@ -14,7 +14,7 @@ const stripe = stripeLib(stripeSecret);
 const app = express();
 
 app.use(session({
-  secret: "test",
+  secret: process.env.SESSION_SECRET || 'fallback_secret',
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -25,7 +25,7 @@ app.use(session({
 // middleware
 app.use(express.json());
 app.use(cors({
-  origin: ['https://northernpickleball.ca'],
+  origin: ['https://northernpickleball.ca','http://localhost:3000'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 }));
@@ -34,7 +34,7 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Credentials', true);
 
   // Use the origin from the request
-  const allowedOrigins = ['https://northernpickleball.ca']; // Add other allowed origins if needed
+  const allowedOrigins = ['https://northernpickleball.ca','http://localhost:3000']; // Add other allowed origins if needed
   const origin = req.headers.origin;
   
   if (allowedOrigins.includes(origin)) {
