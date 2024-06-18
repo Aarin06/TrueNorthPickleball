@@ -26,7 +26,7 @@ app.use(session({
 // middleware
 app.use(express.json());
 app.use(cors({
-  origin: 'true-north-pickleball-front-7mpcgb6cb-aarin06s-projects.vercel.app',
+  origin: 'https://true-north-pickleball-front.vercel.app',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 }));
