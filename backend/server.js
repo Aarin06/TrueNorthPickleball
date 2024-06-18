@@ -7,6 +7,7 @@ import session from 'express-session';
 import cors from 'cors';
 import stripeLib from 'stripe';
 import jwt from "jsonwebtoken";
+import corsHandler from './corsHandler';
 
 const stripeSecret = process.env.STRIPE_SECRET;
 const stripe = stripeLib(stripeSecret);
@@ -31,13 +32,9 @@ app.use(cors({
   credentials: true,
 }));
 
-app.use(function (req, res, next) {
-  //Enabling CORS
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
-  next();
-});
+app.use('https://true-north-pickleball-front.vercel.app', corsHandler);
+
+
 
 app.use((req, res, next) => {
   console.log(req.path, req.method);
