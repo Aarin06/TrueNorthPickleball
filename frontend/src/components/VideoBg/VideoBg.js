@@ -19,7 +19,10 @@ function VideoBg() {
 
   return (
     <div className="main">
-      <video src={videoBg} autoPlay loop muted />
+
+      <video autoPlay loop muted id="video">
+      <source src={videoBg} type="video/mp4"/>
+      </video>
       <div className="overlay"></div>
       <div className="content">
         <h1>{user ? "Hey " + user.firstName + ", Welcome to Northern PickleBall." : "Welcome to Northern PickleBall."}</h1>
