@@ -14,7 +14,7 @@ const paymentSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    session: {
+    sessionId: {
       type: String,
       required: true,
     },
