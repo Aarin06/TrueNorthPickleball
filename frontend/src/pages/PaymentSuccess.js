@@ -1,42 +1,52 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Button, Container, Typography, Box } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import "tailwindcss/tailwind.css";
 import Check from '../media/check.png';
-import { handlePostPayment } from "../api/teamService";
-
+import { getPayment } from "../api/teamService";
+import { getTeamId } from "../api/userService";
 function PaymentSuccess() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const teamId = queryParams.get('teamId');
-  const userId = queryParams.get('userId');
+  const sessionId = queryParams.get('sessionId');
+  const teamId = getTeamId();
+  const [paymentStatus, setPaymentStatus] = useState(false)
 
-  const hasRun = useRef(false);
 
   useEffect(() => {
-    if (!hasRun.current) {
-      handlePostPayment(teamId, userId, true);
-      hasRun.current = true;
-    }
-  }, [teamId, userId]);
+   
+    getPayment(teamId, sessionId).then((res) =>{
+      setPaymentStatus(res.status);
+    })
+    .catch((err)=>{
+      setPaymentStatus(false);
+    })
+   
+  }, []);
 
   return (
     <Container maxWidth="sm" className="py-16 text-center">
-      <Box className="mb-8">
+      {paymentStatus ?
+      <>
+        <Box className="mb-8">
         <Typography variant="h4" className="text-4xl font-bold mb-4">
           Payment Successful!
         </Typography>
         <Typography variant="body1" className="mb-4">
           Thank you for your payment. Your transaction was successful, and your membership has been confirmed.
         </Typography>
-      </Box>
-      <Box className="mb-8">
+        </Box>
+        <Box className="mb-8">
         <img
           src={Check}
           alt="Payment success"
           className="mx-auto mb-4 icon"
         />
-      </Box>
+        </Box>
+      </>
+      :<div className="mb-5">
+        Page Not Found.
+        </div>}
       <Button
         component={Link}
         to="/"

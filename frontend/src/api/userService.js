@@ -8,8 +8,9 @@ const SERVER_URL = "http://localhost:4000";
 axios.defaults.withCredentials = true;
 
 // Helper function to get the token from localStorage
-const getToken = () => localStorage.getItem('token');
-const getUserId = () => localStorage.getItem('userId');
+const getToken = () => localStorage.getItem('token') || null;
+const getUserId = () => localStorage.getItem('userId') || null;
+const getTeamId = () => localStorage.getItem('teamId') || null;
 
 
 // Add a user function
@@ -50,17 +51,29 @@ const getWaiver = async () => {
   }
 };
 
+const getUser = async (userId) => {
+  try {
+    const response = await axios.get(`${SERVER_URL}/api/users/${userId}`, { withCredentials: true });
+    return response.data;
+  } catch (error) {
+    console.error('There was a problem with the axios operation:', error);
+    throw error;
+  }
+};
+
 // Sign in function
 const signIn = async (userData) => {
   try {
-    console.log("here");
     const response = await axios.post(`${SERVER_URL}/api/users/signin`, { userData }, { withCredentials: true });
+    console.log(response.data);
+
     const token = response.data.token;
     const userId = response.data.userId;
+    const teamId = response.data.teamId;
     if (token) {
       localStorage.setItem('token', token);
       localStorage.setItem('userId', userId);
-
+      localStorage.setItem('teamId', teamId);
     }
     return response.data;
   } catch (error) {
@@ -75,6 +88,8 @@ const signOut = async () => {
     const response = await axios.get(`${SERVER_URL}/api/users/signout`, { withCredentials: true });
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
+    localStorage.removeItem('teamId');
+
 
     return response.data;
   } catch (error) {
@@ -110,5 +125,7 @@ export {
   getToken,
   getUserId,
   signWaiver,
-  getWaiver
+  getWaiver,
+  getTeamId,
+  getUser
 };

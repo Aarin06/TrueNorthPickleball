@@ -1,13 +1,13 @@
 import User from '../models/User.js';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import { authorize } from '../middleware/auth.js'
 import jwt from 'jsonwebtoken';
 import Waiver from '../models/Waiver.js';
+import TeamMember from '../models/TeamMember.js';
 
 // Get all users
 const getUsers = async (req, res) => {
-  const users = await User.find({}).sort({ createdAt: -1 });
+  const users = await User.find({}, { firstName: 1, lastName: 1, email: 1, phoneNumber: 1 }).sort({ createdAt: -1 });
   res.status(200).json(users);
 };
 
@@ -19,13 +19,17 @@ const getUser = async (req, res) => {
     return res.status(404).json({ error: 'No such user' });
   }
 
-  const user = await User.findById(id);
+  try {
+    const user = await User.findById(id, { firstName: 1, lastName: 1, email: 1, phone: 1 });
 
-  if (!user) {
-    return res.status(404).json({ error: 'No such user' });
+    if (!user) {
+      return res.status(404).json({ error: 'No such user' });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the user' });
   }
-
-  res.status(200).json(user);
 };
 
 // Get a single user by ID
@@ -90,7 +94,6 @@ const createUser = async (req, res) => {
 const signWaiver = async (req, res) => {
   const { userId } = req.body;
 
-
   try {
     const exists = await User.findOne({ _id: userId });
     if (!exists) {
@@ -122,7 +125,9 @@ const signIn = async (req, res) => {
     if (!user) {
       return res.status(401).json({ message: "Incorrect username or password." });
     }
-    
+
+    const team = await TeamMember.findOne({ userId: user._id }, { teamId: 1 });
+    console.log("tean", team.teamId)
     const hash = user.password; // Load hash from your password DB.
     const password = userData.password; // This is the password passed in by the user
     const result = bcrypt.compareSync(password, hash);
@@ -137,7 +142,7 @@ const signIn = async (req, res) => {
 
     // Returning JSON Web Token (search JWT for more explanation)
     const token = jwt.sign({ userId: user._id }, "secret-key", { expiresIn: "1h" });
-    res.status(201).json({ response: "User signed in successfully.", token, userId: user._id });
+    res.status(201).json({ response: "User signed in successfully.", token, userId: user._id, teamId: team.teamId });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

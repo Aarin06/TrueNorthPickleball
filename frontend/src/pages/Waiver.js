@@ -2,15 +2,11 @@ import { useEffect, useState } from "react";
 import { Container, Typography, Box, Button, FormControlLabel, FormGroup, Checkbox } from "@mui/material";
 import { loadStripe } from '@stripe/stripe-js';
 import "tailwindcss/tailwind.css";
-import { makeTeamPayment } from "../api/teamService";
-import { signWaiver, getUserId, getWaiver } from "../api/userService";
-import { getTeamCaptain } from "../api/teamService";
-import { useLocation } from 'react-router-dom';
+import { getPayment, makeTeamPayment, getTeamCaptain } from "../api/teamService";
+import { signWaiver, getUserId, getWaiver, getTeamId } from "../api/userService";
 
 function Waiver() {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const teamId = queryParams.get('teamId') || '';
+  const teamId = getTeamId();
   const userId = getUserId();
   const [checks, setChecks] = useState([
     {
@@ -24,6 +20,8 @@ function Waiver() {
   ]);
   const [waiverSigned, setWaiverSigned] = useState(false);
   const [isTeamCaptain, setIsTeamCaptain] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState(false);
+
 
   const handleCheckboxChange = (index) => {
     setChecks(prevChecks =>
@@ -69,7 +67,6 @@ function Waiver() {
     .catch((err) =>{
 
     });
-
     getTeamCaptain(teamId).then((res) => {
       if (userId === res._id) {
         setIsTeamCaptain(true);
@@ -77,6 +74,12 @@ function Waiver() {
     })
     .catch((err) =>{
       
+    });
+    getPayment(teamId).then((res) =>{
+      setPaymentStatus(res.status);
+    })
+    .catch((err) =>{
+      setPaymentStatus(false);
     });
   }, [teamId, userId]);
 
@@ -178,7 +181,7 @@ function Waiver() {
           sx={{ marginBottom: "10px" }}
           disabled={!checks.every(check => check.value) || waiverSigned}
         >
-          Sign Waiver
+          {waiverSigned ? "Signed" : "Sign Waiver"}
         </Button>
         {isTeamCaptain && (
           <Button
@@ -186,7 +189,7 @@ function Waiver() {
             variant="contained"
             color="secondary"
             className="w-full"
-            disabled={!waiverSigned}
+            disabled={!waiverSigned || paymentStatus}
           >
             Pay Now
           </Button>

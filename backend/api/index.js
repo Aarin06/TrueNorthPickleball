@@ -3,6 +3,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import userRoutes from '../routes/userRoutes.js';
 import teamRoutes from '../routes/teamRoutes.js';
+import stripeWebhook from '../routes/paymentRoutes.js';
 import session from 'express-session';
 import cors from 'cors';
 import stripeLib from 'stripe';
@@ -64,6 +65,8 @@ if (!mongoUri) {
 // routes
 app.use('/api/users', userRoutes);
 app.use('/api/teams', teamRoutes);
+app.use('/api/stripewebhook', stripeWebhook);
+
 
 // connect to db
 mongoose.connect(mongoUri)

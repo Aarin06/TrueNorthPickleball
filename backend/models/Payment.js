@@ -13,7 +13,11 @@ const paymentSchema = new mongoose.Schema({
     teamId: {
       type: String,
       required: true,
-    }
+    },
+    session: {
+      type: String,
+      required: true,
+    },
   }, { timestamps: true });
 
 export default mongoose.model('Payment', paymentSchema);

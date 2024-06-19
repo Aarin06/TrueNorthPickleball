@@ -17,7 +17,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import HeaderMobile from "./components/Header/HeaderMobile";
 import AboutUs from "./pages/AboutUs";
 import Schedule from "./pages/Schedule";
-import { getMe, getUserId } from "./api/userService";
+import { getUserId } from "./api/userService";
 import Waiver from "./pages/Waiver";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailure from "./pages/PaymentFailure";

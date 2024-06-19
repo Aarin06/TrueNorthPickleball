@@ -35,16 +35,16 @@ const getTeam = async (req, res) => {
 
 // get a single workout
 const getPayment = async (req, res) => {
-  const { id } = req.params;
+  const { teamId, sessionId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such team' });
   }
 
-  const payment = await Payment.findOne({teamId: id});
+  const payment = await Payment.findOne({teamId: teamId, sessionId: sessionId});
 
   if (!payment) {
-    return res.status(404).json({ error: 'No such team' });
+    return res.status(404).json({ error: 'No such payment' });
   }
 
   res.status(200).json(payment);
@@ -179,15 +179,13 @@ const joinTeam = async (req, res) => {
 const makeTeamPayment = async (req, res) => {
   const { userId, teamId } = req.body;
 
-  console.log("help",req.body)
-
   const lineItems = [{
     price_data: {
       currency: "cad",
       product_data: {
         name: "League Membership",
       },
-      unit_amount: 100
+      unit_amount: 10000 // Amount in cents
     },
     quantity: 1
   }];
@@ -196,25 +194,25 @@ const makeTeamPayment = async (req, res) => {
     payment_method_types: ["card"],
     line_items: lineItems,
     mode: "payment",
-    success_url: `https://true-north-pickleball-front.vercel.app/success?teamId=${teamId}&userId=${userId}`,
-    cancel_url: `https://true-north-pickleball-front.vercel.app/failure?teamId=${teamId}&userId=${userId}`
+    success_url: `https://true-north-pickleball-front.vercel.app/success?sessionId={CHECKOUT_SESSION_ID}`,
+    cancel_url: `https://true-north-pickleball-front.vercel.app/failure?sessionId={CHECKOUT_SESSION_ID}`,
+    metadata: { userId, teamId } // Include userId and teamId in metadata here
   });
 
-  console.log(session);
+  await Payment.create({ userId, teamId, status: false, sessionId: session.id });
 
   res.json({ id: session.id });
 };
 
-const handlePostPayment = async (req, res) => {
-  const { userId, teamId, status } = req.body;
-
+const handlePostPayment = async (userId, teamId, status) => {
   try {
-    const payment = await Payment.create({userId, teamId, status});
-
-    res.status(200).json(payment);
+    const payment = await Payment.updateOne({ userId, teamId }, { status: status });
+    console.log(`Payment status updated to ${status} for userId: ${userId}, teamId: ${teamId}`);
+    console.log(payment);
+    return payment;
   } catch (error) {
-    console.log(error);
-    res.status(400).json({ error: error.message });
+    console.error(`Failed to update payment status for userId: ${userId}, teamId: ${teamId}`, error);
+    throw error;
   }
 };
 

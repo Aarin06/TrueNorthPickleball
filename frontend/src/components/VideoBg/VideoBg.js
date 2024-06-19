@@ -2,7 +2,7 @@ import "./VideoBg.css";
 import videoBg from "../../media/video01.MP4";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import { getUserId, getMe } from "../../api/userService";
+import { getUserId, getUser } from "../../api/userService";
 import { useEffect, useState } from "react";
 
 function VideoBg() {
@@ -11,9 +11,9 @@ function VideoBg() {
   const [user, setUser] = useState({});
 
   useEffect(() =>{
-    getMe().then((res) =>{
-      setUser(res)
-    })
+      getUser(userId).then((res) =>{
+        setUser(res);
+      })
     .catch((err)=>{setUser(null)})
   },[])
 

@@ -1,28 +1,34 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Button, Container, Typography, Box } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import "tailwindcss/tailwind.css";
-import { handlePostPayment } from "../api/teamService";
 import Fail from '../media/close.png';
-
-function PaymentFailure() {
+import { getPayment } from "../api/teamService";
+import { getTeamId } from "../api/userService";
+function PaymentSuccess() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const teamId = queryParams.get('teamId');
-  const userId = queryParams.get('userId');
+  const sessionId = queryParams.get('sessionId');
+  const teamId = getTeamId();
+  const [paymentStatus, setPaymentStatus] = useState(null)
 
-  const hasRun = useRef(false);
 
   useEffect(() => {
-    if (!hasRun.current) {
-      handlePostPayment(teamId, userId, false);
-      hasRun.current = true;
-    }
-  }, [teamId, userId]);
+   
+    getPayment(teamId, sessionId).then((res) =>{
+      setPaymentStatus(res.status);
+    })
+    .catch((err)=>{
+      setPaymentStatus(false);
+    })
+   
+  }, []);
 
   return (
     <Container maxWidth="sm" className="py-16 text-center">
-      <Box className="mb-8">
+      {paymentStatus === null ?
+      <>
+       <Box className="mb-8">
         <Typography variant="h4" className="text-4xl font-bold mb-4">
           Payment Failed
         </Typography>
@@ -37,6 +43,10 @@ function PaymentFailure() {
           className="mx-auto mb-4 w-20"
         />
       </Box>
+      </>
+      :<div className="mb-5">
+        Page Not Found.
+        </div>}
       <Button
         component={Link}
         to="/"
@@ -46,18 +56,8 @@ function PaymentFailure() {
       >
         Go to Homepage
       </Button>
-      <a href="mailto:northernpickleball@gmail.com">
-        <Button
-          variant="outlined"
-          color="primary"
-          className="mt-4 ml-4"
-          sx={{ marginLeft: "10px" }}
-        >
-          Contact Us
-        </Button>
-      </a>
     </Container>
   );
 }
 
-export default PaymentFailure;
+export default PaymentSuccess;

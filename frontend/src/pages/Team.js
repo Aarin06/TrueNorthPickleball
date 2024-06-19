@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Container, Grid, Card, Typography, Box } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import { getTeam, getTeamCaptain, getRoster, getPayment } from "../api/teamService";
-import { getMe, getUserId} from "../api/userService";
+import { getUserId } from "../api/userService";
 
 import Logo from "../media/logo.png";
 import "tailwindcss/tailwind.css";
@@ -33,7 +33,7 @@ function Team() {
 
       getRoster(params.teamId).then((res) => {
         setRoster(res);
-        res.map((player) =>{
+        res.map((player) => {
           if (player._id === user){
             setJoined(true);
           }
