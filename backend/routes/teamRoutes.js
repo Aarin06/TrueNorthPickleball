@@ -33,7 +33,7 @@ router.post('/join', joinTeam);
 router.get('/:id', getTeam);
 
 // GET a single workout
-router.get('/:teamId/payment', getPayment);
+router.get('/:id/payment', getPayment);
 
 // UPDATE a workout
 router.patch('/:id', updateTeam);

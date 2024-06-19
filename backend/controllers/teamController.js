@@ -35,13 +35,13 @@ const getTeam = async (req, res) => {
 
 // get a single workout
 const getPayment = async (req, res) => {
-  const { teamId } = req.params;
+  const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such team' });
   }
 
-  const payment = await Payment.findOne({teamId: teamId});
+  const payment = await Payment.findOne({teamId: id});
 
   if (!payment) {
     return res.status(404).json({ error: 'No such payment' });
