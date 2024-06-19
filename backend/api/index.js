@@ -23,6 +23,9 @@ app.use(session({
   }
 }));
 
+app.use('/api/stripewebhook', stripeWebhook);
+
+
 // middleware
 app.use(express.json());
 app.use(cors({
@@ -65,8 +68,6 @@ if (!mongoUri) {
 // routes
 app.use('/api/users', userRoutes);
 app.use('/api/teams', teamRoutes);
-app.use('/api/stripewebhook', stripeWebhook);
-
 
 // connect to db
 mongoose.connect(mongoUri)

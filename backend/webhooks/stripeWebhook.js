@@ -1,17 +1,17 @@
 import 'dotenv/config';
 import express from 'express';
-import stripePackage from 'stripe';
+import Stripe from 'stripe';
 import { handlePostPayment } from '../controllers/teamController.js';
 
 const router = express.Router();
 const stripeSecret = process.env.STRIPE_SECRET;
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-const stripe = stripePackage(stripeSecret);
-const endpointSecret = webhookSecret;
+const stripe = new Stripe(stripeSecret);
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const stripeWebhook = async (req, res) => {
   const sig = req.headers['stripe-signature'];
+  console.log(req.body);
 
   let event;
 

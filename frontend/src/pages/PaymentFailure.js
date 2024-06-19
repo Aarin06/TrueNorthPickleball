@@ -10,7 +10,7 @@ function PaymentSuccess() {
   const queryParams = new URLSearchParams(location.search);
   const sessionId = queryParams.get('sessionId');
   const teamId = getTeamId();
-  const [paymentStatus, setPaymentStatus] = useState(null)
+  const [paymentStatus, setPaymentStatus] = useState(false)
 
 
   useEffect(() => {
@@ -19,7 +19,7 @@ function PaymentSuccess() {
       setPaymentStatus(res.status);
     })
     .catch((err)=>{
-      setPaymentStatus(false);
+      setPaymentStatus(null);
     })
    
   }, []);
