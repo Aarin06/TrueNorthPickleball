@@ -23,6 +23,11 @@ function VideoBg() {
       <video autoPlay loop muted id="video">
       <source src={videoBg} type="video/mp4"/>
       </video>
+      <div className="" dangerouslySetInnerHTML={{ __html: `
+        <video playsinline autoPlay loop muted autobuffer id="video">
+          <source src={videoBg} type="video/mp4"/>
+        </video>           
+    ` }}></div>
       <div className="overlay"></div>
       <div className="content">
         <h1>{user ? "Hey " + user.firstName + ", Welcome to Northern PickleBall." : "Welcome to Northern PickleBall."}</h1>
