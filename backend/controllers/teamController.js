@@ -183,7 +183,7 @@ const makeTeamPayment = async (req, res) => {
       product_data: {
         name: "League Membership",
       },
-      unit_amount: 10000 // Amount in cents
+      unit_amount: 100 // Amount in cents
     },
     quantity: 1
   }];
@@ -192,8 +192,8 @@ const makeTeamPayment = async (req, res) => {
     payment_method_types: ["card"],
     line_items: lineItems,
     mode: "payment",
-    success_url: `http://localhost:3000/success`,
-    cancel_url: `https://localhost:3000/failure`,
+    success_url: `https://northernpickleball.ca/success`,
+    cancel_url: `https://northernpickleball.ca/failure`,
     metadata: { userId, teamId } // Include userId and teamId in metadata here
   });
 
