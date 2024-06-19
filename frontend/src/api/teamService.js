@@ -37,8 +37,8 @@ const getTeam = function (teamId) {
     });
 };
 
-const getPayment = function (teamId, sessionId) {
-  return axios.get(SERVER_URL + `/api/teams/${teamId}/payment/${sessionId}`)
+const getPayment = function (teamId) {
+  return axios.get(SERVER_URL + `/api/teams/${teamId}/payment`)
     .then((res) => res.data)
     .catch((error) => {
       console.error('There was a problem with the axios operation:', error);

@@ -15,7 +15,7 @@ function PaymentSuccess() {
 
   useEffect(() => {
    
-    getPayment(teamId, sessionId).then((res) =>{
+    getPayment(teamId).then((res) =>{
       setPaymentStatus(res.status);
     })
     .catch((err)=>{
