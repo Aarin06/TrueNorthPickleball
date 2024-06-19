@@ -33,6 +33,7 @@ function Waiver() {
 
   const handleSignWaiver = async () => {
     signWaiver(userId).then((res) => {
+      setWaiverSigned(res.signed)
     });
   };
 
