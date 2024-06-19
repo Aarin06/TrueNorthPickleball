@@ -5,7 +5,6 @@ const SERVER_URL = "http://localhost:4000";
 axios.defaults.withCredentials = true;
 
 const addTeam = function (teamData) {
-  console.log(teamData)
   return axios.post(SERVER_URL + "/api/teams", { teamData: teamData })
     .then((res) => res.data)
     .catch((error) => {

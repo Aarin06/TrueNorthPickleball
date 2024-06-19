@@ -38,7 +38,6 @@ function Signin() {
     );
   };
   const handleSubmission = () => {
-    console.log(fields)
     let allFieldsValid = true;
     const updatedFields = fields.map((field) => {
       if (field.value.trim() === "") {
@@ -62,7 +61,6 @@ function Signin() {
       }, {});
 
       signIn(userData).then((res) =>{
-        console.log(res);
         navigate("/");
         window.location.reload();
       })

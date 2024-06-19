@@ -251,31 +251,28 @@ function Signup() {
         return acc;
       }, {});
 
-      console.log(userData);
-      console.log(teamData);
 
       delete userData.confirmPassword
 
       addUser(userData)
       .then((responseUser) => {
-        console.log("res", responseUser);
 
         teamData.captain = responseUser._id;
 
         if (create) {
           addTeam(teamData).then((responseTeam) => {
-            console.log(responseTeam);
+            
             signIn(responseUser).then((res) =>{
-              console.log(res);
+              
               navigate(`/waiver?teamId=${responseTeam._id}`);
               window.location.reload();
             })
           });
         } else {
           joinTeam(team[0].value, responseUser.userId).then((responseTeam) => {
-            console.log(responseTeam);
+            
             signIn(responseUser).then((res) =>{
-              console.log(res);
+              
               navigate(`/waiver?teamId=${responseTeam._id}`);
               window.location.reload();
             })
@@ -295,9 +292,7 @@ function Signup() {
   const handleTeamSubmission = () => {
     let allFieldsValidCreate = true;
     let allFieldsValidJoin = true;
-    // console.log(team);
     const updatedTeam = team.map((field) => {
-      console.log(field)
       if (field.value.trim() === "") {
         if (field.label === "Team Name")
           allFieldsValidJoin = false;

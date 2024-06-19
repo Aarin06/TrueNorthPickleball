@@ -33,8 +33,6 @@ function Waiver() {
 
   const handleSignWaiver = async () => {
     signWaiver(userId).then((res) => {
-      console.log(res);
-      setWaiverSigned(res.signed);
     });
   };
 
@@ -44,14 +42,13 @@ function Waiver() {
     if (isTeamCaptain) {
       try {
         const res = await makeTeamPayment(teamId, userId);
-        console.log(res);
         
         const result = await stripe.redirectToCheckout({
           sessionId: res.id
         });
   
         if (result.error) {
-          console.log(result.error);
+          // console.log(result.error);
         }
       } catch (error) {
         console.error("Payment failed: ", error);
@@ -61,7 +58,6 @@ function Waiver() {
 
   useEffect(() => {
     getWaiver(userId).then((res) => {
-      console.log(res);
       setWaiverSigned(res.signed);
     })
     .catch((err) =>{

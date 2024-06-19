@@ -108,8 +108,6 @@ const createTeam = async (req, res) => {
   teamData.playerCount = 1;
   teamData.locked = true;
 
-  console.log(teamData);
-
   //check empty
 
   //check if duplicate team
@@ -207,8 +205,7 @@ const makeTeamPayment = async (req, res) => {
 const handlePostPayment = async (userId, teamId, status) => {
   try {
     const payment = await Payment.updateOne({ userId, teamId }, { status: status });
-    console.log(`Payment status updated to ${status} for userId: ${userId}, teamId: ${teamId}`);
-    console.log(payment);
+
     return payment;
   } catch (error) {
     console.error(`Failed to update payment status for userId: ${userId}, teamId: ${teamId}`, error);

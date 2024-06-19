@@ -12,7 +12,6 @@ function JoinTeam({ team, rank }) {
 
 
   useEffect(() => {
-    console.log(team);
     getTeams().then((response) =>{
       response.map((item)=>{
         item.label = item.name+" ("+experienceMapping[item.experienceLevel]+")";
@@ -20,7 +19,6 @@ function JoinTeam({ team, rank }) {
           item.label += " FULL";
         }
       })
-      console.log(response)
       setTeamOptions(response);
     })
   }, [])

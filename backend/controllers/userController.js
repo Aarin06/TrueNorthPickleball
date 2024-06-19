@@ -118,7 +118,6 @@ const signIn = async (req, res) => {
   const { userData } = req.body;
 
   try {
-    console.log(userData);
 
     const user = await User.findOne({ email: userData.email });
 
@@ -127,14 +126,10 @@ const signIn = async (req, res) => {
     }
 
     const team = await TeamMember.findOne({ userId: user._id }, { teamId: 1 });
-    console.log("tean", team.teamId)
     const hash = user.password; // Load hash from your password DB.
     const password = userData.password; // This is the password passed in by the user
     const result = bcrypt.compareSync(password, hash);
-    console.log(hash);
-    console.log(password);
-
-    console.log(result);
+ 
 
     if (!result) {
       return res.status(401).json({ message: "Incorrect username or password." });

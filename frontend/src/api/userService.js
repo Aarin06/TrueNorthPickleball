@@ -16,7 +16,6 @@ const getTeamId = () => localStorage.getItem('teamId') || null;
 // Add a user function
 const addUser = async (userData) => {
   try {
-    console.log(userData);
     const response = await axios.post(`${SERVER_URL}/api/users`, { userData });
     return response.data;
   } catch (error) {
@@ -65,7 +64,6 @@ const getUser = async (userId) => {
 const signIn = async (userData) => {
   try {
     const response = await axios.post(`${SERVER_URL}/api/users/signin`, { userData }, { withCredentials: true });
-    console.log(response.data);
 
     const token = response.data.token;
     const userId = response.data.userId;

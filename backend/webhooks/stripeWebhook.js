@@ -11,7 +11,6 @@ const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const stripeWebhook = async (req, res) => {
   const sig = req.headers['stripe-signature'];
-  console.log(req.body);
 
   let event;
 

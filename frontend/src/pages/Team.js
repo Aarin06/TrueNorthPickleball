@@ -25,7 +25,6 @@ function Team() {
       });
 
       getPayment(params.teamId).then((res) =>{
-        console.log(res)
         setPayment(res);
       }).catch((err) =>{
         setPayment({status:false})
