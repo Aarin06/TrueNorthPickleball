@@ -4,7 +4,7 @@ import { Card, Grid, Button } from "@mui/material";
 import CreateTeam from "../../components/CreateTeam/CreateTeam";
 import JoinTeam from "../../components/JoinTeam/JoinTeam";
 import { addUser, signIn } from "../../api/userService";
-import { addTeam, joinTeam } from "../../api/teamService";
+import { addTeam, checkTeams, joinTeam } from "../../api/teamService";
 import CreateAccount from "../../components/CreateAccount";
 import { useNavigate } from "react-router-dom";
 
@@ -302,7 +302,7 @@ function Signup() {
               });
             });
           } else {
-            joinTeam(team[0].value, responseUser.userId).then((responseTeam) => {
+            joinTeam(team[0].value, responseUser._id).then((responseTeam) => {
               signIn(responseUser).then((res) => {
                 // navigate(`/waiver?teamId=${responseTeam._id}`);
                 navigate(`/waiver`);
@@ -317,24 +317,40 @@ function Signup() {
         });
     }
   };
-
-  const handleTeamSubmission = () => {
+  const handleBack = async () => {
+    setState((prevState) => prevState - 1) 
+    setErr("");
+  }
+  const handleTeamSubmission = async () => {
     let allFieldsValidCreate = true;
     let allFieldsValidJoin = true;
-    const updatedTeam = team.map((field) => {
-      if (field.value.trim() === "") {
-        if (field.label === "Team Name") allFieldsValidJoin = false;
-        allFieldsValidCreate = false;
-        return {
-          ...field,
-          helperText: `${field.label} is required`,
-          error: true,
-        };
-      }
-      return field;
-    });
-    setTeam(updatedTeam);
-
+    if (team[0].value.trim() === ""){
+      return false;
+    }
+    let res = await checkTeams(team[0].value);
+    console.log(res);
+    if (res.success){
+      const updatedTeam = team.map((field) => {
+        if (field.value.trim() === "") {
+          if (field.label === "Team Name") allFieldsValidJoin = false;
+          allFieldsValidCreate = false;
+          return {
+            ...field,
+            helperText: `${field.label} is required`,
+            error: true,
+          };
+        }
+        return field;
+      });
+      setTeam(updatedTeam);
+    }
+    else{
+      allFieldsValidCreate = false;
+      setErr("This Team Name is Taken.");
+      
+    }
+  
+    console.log("here", allFieldsValidCreate)
     return create ? allFieldsValidCreate : allFieldsValidJoin;
   };
 
@@ -372,7 +388,7 @@ function Signup() {
             </div>
           </div>
         ) : state === 1 && create ? (
-          <CreateTeam team={team[0]} rank={team[1]} />
+          <CreateTeam team={team[0]} rank={team[1]} error={err} />
         ) : state === 1 && !create ? (
           <JoinTeam team={team[0]} />
         ) : state === 2 ? (
@@ -388,8 +404,8 @@ function Signup() {
         {state > 0 ? (
           <div className="flex flex-row mb-5 ml-5 mr-5 justify-between">
             <Button
-              onClick={() => {
-                setState((prevState) => prevState - 1);
+              onClick={async () => {
+                await handleBack();
               }}
               variant="contained"
               color="secondary"
@@ -397,8 +413,8 @@ function Signup() {
               Back
             </Button>
             <Button
-              onClick={() => {
-                handleTeamSubmission() && setState((prevState) => prevState + 1);
+              onClick={async () => {
+                await handleTeamSubmission() && setState((prevState) => prevState + 1) && setErr("");
               }}
               variant="contained"
               color="secondary"

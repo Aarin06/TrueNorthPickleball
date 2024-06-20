@@ -8,10 +8,11 @@ import {
   FormHelperText,
 } from "@mui/material";
 
-function CreateTeam({ team, rank }) {
+function CreateTeam({ team, rank, error}) {
   return (
     <div className="content-center">
       <img className="max-w-44" src={Logo} alt="logo" />
+      <p className="pb-4 text-red-700">{error}</p>
       <TextField
         required
         key={team.label}

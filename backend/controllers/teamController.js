@@ -16,6 +16,23 @@ const getTeams = async (req, res) => {
   res.status(200).json(users);
 };
 
+const checkTeams = async (req, res) => {
+  const { name } = req.params;
+
+  if (name === ""){
+    return res.status(200).json({success: false});
+  }
+
+  const team = await Team.findOne({name: name});
+
+  if (team) {
+    return res.status(200).json({success: false});
+  }
+
+  res.status(200).json({success: true});
+};
+
+
 // get a single workout
 const getTeam = async (req, res) => {
   const { id } = req.params;
@@ -147,7 +164,7 @@ const updateTeam = async (req, res) => {
 
 const joinTeam = async (req, res) => {
   const { teamName, userId } = req.body;
-
+  console.log(teamName, userId)
   try {
     // Find the team by teamName
     const team = await Team.findOne({ name: teamName });
@@ -223,5 +240,6 @@ export {
   getRoster, 
   makeTeamPayment,
   handlePostPayment,
-  getPayment
+  getPayment,
+  checkTeams
 };

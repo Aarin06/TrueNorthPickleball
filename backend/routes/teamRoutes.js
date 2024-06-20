@@ -9,7 +9,8 @@ import {
   getRoster, 
   makeTeamPayment,
   handlePostPayment,
-  getPayment
+  getPayment,
+  checkTeams
 } from '../controllers/teamController.js';
 import { authorize } from '../middleware/auth.js';
 
@@ -17,6 +18,9 @@ const router = express.Router();
 
 // GET all workouts
 router.get('/', getTeams);
+
+// GET all workouts
+router.get('/check/:name', checkTeams);
 
 // POST a new workout
 router.post('/', createTeam);

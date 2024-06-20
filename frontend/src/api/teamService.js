@@ -35,6 +35,16 @@ const getTeams = async () => {
   }
 };
 
+const checkTeams = async (name) => {
+  try {
+    const response = await axios.get(SERVER_URL + `/api/teams/check/${name}`);
+    return response.data;
+  } catch (error) {
+    console.error('There was a problem with the axios operation:', error);
+    throw error;
+  }
+};
+
 const getTeam = async (teamId) => {
   try {
     const response = await axios.get(SERVER_URL + `/api/teams/${teamId}`);
@@ -128,5 +138,6 @@ export {
   getRoster,
   makeTeamPayment,
   handlePostPayment,
-  getPayment
+  getPayment,
+  checkTeams
 };
