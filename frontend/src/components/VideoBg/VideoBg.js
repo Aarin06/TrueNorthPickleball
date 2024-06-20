@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 function VideoBg() {
   const userId = getUserId();
 
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
 
   useEffect(() =>{
       getUser(userId).then((res) =>{
