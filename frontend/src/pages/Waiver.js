@@ -38,7 +38,7 @@ function Waiver() {
   };
 
   const makePayment = async () => {
-    const stripe = await loadStripe("pk_live_51PRzeAIvtf1ygAtOiJD9Ze5tS4PJMVu4RCDUtKkQ4XXzWiPDiffCc5VNbsSRN59gPh6bFcwuS7qZ01zJtSjpG1Fk00160yvtui");
+    const stripe = await loadStripe("pk_test_51PRzeAIvtf1ygAtOqFrn2jpI3OQXfPyzp4qF6tXBIXQG7brDKK1RYB8mIfaUxopb9dT9iAGXJe32OIWiLoCRDV0S00O3En4RLZ");
   
     if (isTeamCaptain) {
       try {
