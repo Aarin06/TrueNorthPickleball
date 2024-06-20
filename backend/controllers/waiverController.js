@@ -7,7 +7,7 @@ import UserWaiver from '../models/UserWaiver.js';
 const getWaiver = async (req, res) => {
   // const { id } = req.params;
 
-  const id = "6673bb5419ddc14265a44bfa";
+  const id = "6673da6f3404039306933d1d";
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such waiver' });
