@@ -297,15 +297,16 @@ function Signup() {
             addTeam(teamData).then((responseTeam) => {
               signIn(responseUser).then((res) => {
                 // navigate(`/waiver?teamId=${responseTeam._id}`);
-                // window.location.reload();
+                navigate(`/waiver`);
+                window.location.reload();
               });
             });
           } else {
             joinTeam(team[0].value, responseUser.userId).then((responseTeam) => {
               signIn(responseUser).then((res) => {
                 // navigate(`/waiver?teamId=${responseTeam._id}`);
-                // navigate(`/waiver`);
-                // window.location.reload();
+                navigate(`/waiver`);
+                window.location.reload();
               });
             });
           }
