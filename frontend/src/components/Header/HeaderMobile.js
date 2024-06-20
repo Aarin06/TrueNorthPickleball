@@ -58,6 +58,13 @@ function HeaderMobile() {
         <Link to={"/teams"} className="menu-item" onClick={closeMenu}>
           Teams
         </Link>
+        {loggedIn ? 
+         <Link to={"/waiver"} className="menu-item" onClick={closeMenu}>
+         Waiver
+       </Link>
+         :
+          <></>
+        }
         {loggedIn? 
          <Link to={"/signin"} className="menu-item" onClick={handleSignOut}>
           Sign Out

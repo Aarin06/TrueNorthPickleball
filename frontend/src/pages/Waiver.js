@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, Fragment } from "react";
-import { Container, Typography, Box, Button, FormControlLabel, FormGroup, Checkbox } from "@mui/material";
+import { Container, Typography, Box, Button, FormControlLabel, FormGroup, Checkbox, CircularProgress } from "@mui/material";
 import { loadStripe } from '@stripe/stripe-js';
 import "tailwindcss/tailwind.css";
 import { getPayment, makeTeamPayment, getTeamCaptain } from "../api/teamService";
@@ -17,6 +17,10 @@ function Waiver() {
   const [checks, setChecks] = useState([]);
   const [waiver, setWaiver] = useState(null);
   const [isSignatureEmpty, setIsSignatureEmpty] = useState(true);
+  const [loadingWaiver, setLoadingWaiver] = useState(true);
+  const [loadingUserWaiver, setLoadingUserWaiver] = useState(true);
+  const [loadingTeamCaptain, setLoadingTeamCaptain] = useState(true);
+  const [loadingPayment, setLoadingPayment] = useState(true);
 
   const clear = () => {
     sigCanvas.current.clear();
@@ -64,38 +68,45 @@ function Waiver() {
   };
 
   useEffect(() => {
-    getWaiver().then((res) => {
-      setWaiver(res);
-
-      getUserWaiver(res._id, userId).then((res) => {
+    getWaiver()
+      .then((res) => {
+        setWaiver(res);
+        setLoadingWaiver(false);
+        return getUserWaiver(res._id, userId);
+      })
+      .then((res) => {
         setUserWaiver(res);
         setChecks(res.checks);
+        setLoadingUserWaiver(false);
       })
       .catch((err) => {
-        setUserWaiver({signed:false});
+        setUserWaiver({ signed: false });
+        setLoadingUserWaiver(false);
       });
 
-    })
+    getTeamCaptain(teamId)
+      .then((res) => {
+        if (userId === res._id) {
+          setIsTeamCaptain(true);
+        }
+        setLoadingTeamCaptain(false);
+      })
       .catch((err) => {
+        setLoadingTeamCaptain(false);
       });
 
-    getTeamCaptain(teamId).then((res) => {
-      if (userId === res._id) {
-        setIsTeamCaptain(true);
-      }
-    })
-      .catch((err) => {
-
-      });
-
-    getPayment(teamId).then((res) => {
-      setPaymentStatus(res.status);
-    })
+    getPayment(teamId)
+      .then((res) => {
+        setPaymentStatus(res.status);
+        setLoadingPayment(false);
+      })
       .catch((err) => {
         setPaymentStatus(false);
+        setLoadingPayment(false);
       });
-
   }, [teamId, userId]);
+
+  const isLoading = loadingWaiver || loadingUserWaiver;
 
   return (
     <Container maxWidth="md" className="py-8">
@@ -104,116 +115,124 @@ function Waiver() {
           Waiver
         </Typography>
       </Box>
-      {waiver ?
-        <Box className="mb-16">
-          <Typography variant="h5" className="text-3xl font-semibold mb-4">
-            {waiver.waiverData.activity_details.title}
-          </Typography>
-          <Typography variant="body1" className="pb-4">
-            {waiver.waiverData.activity_details.description}
-          </Typography>
-          <Typography variant="h5" className="text-3xl font-semibold mb-4">
-            {waiver.waiverData.consideration.title}
-          </Typography>
-          <Typography variant="body1" className="pb-4">
-            {waiver.waiverData.consideration.description}
-          </Typography>
-          <Typography variant="h5" className="text-3xl font-semibold mb-4">
-            {waiver.waiverData.concurrent_release.title}
-          </Typography>
-          <Typography variant="body1" className="pb-4">
-            {waiver.waiverData.concurrent_release.description}
-          </Typography>
-          <Typography variant="h5" className="text-3xl font-semibold mb-4">
-            {waiver.waiverData.fitness_to_participate.title}
-          </Typography>
-          <Typography variant="body1" className="pb-4">
-            {waiver.waiverData.fitness_to_participate.description}
-          </Typography>
-          <Typography variant="h5" className="text-3xl font-semibold mb-4">
-            {waiver.waiverData.full_and_final_settlement.title}
-          </Typography>
-          <Typography variant="body1" className="pb-4">
-            {waiver.waiverData.full_and_final_settlement.description}
-          </Typography>
-          <Typography variant="h5" className="text-3xl font-semibold mb-4">
-            {waiver.waiverData.refund_policy.title}
-          </Typography>
-          <br></br>
-          {waiver.waiverData.refund_policy.sections.map((section, index) => (
-            <Fragment key={index}>
-              <Typography variant="body1" className="pb-4">
-                {section.description}
+      {isLoading ? (
+        <div className="flex justify-center mt-20">
+          <CircularProgress size={100} />
+        </div>
+        ) : (
+          waiver && (
+            <Box className="mb-16">
+              <Typography variant="h5" className="text-3xl font-semibold mb-4">
+                {waiver.waiverData.activity_details.title}
               </Typography>
-            </Fragment>
-          ))}
-
-          <FormGroup className="pb-4">
-            {checks.map((check, index) => (
-              <FormControlLabel
-                key={index}
-                control={<Checkbox checked={check.value || userWaiver.signed} disabled={userWaiver.signed} onChange={() => handleCheckboxChange(index)} />}
-                label={check.label}
-              />
-            ))}
-          </FormGroup>
-          <div>
-            {userWaiver.signed ?
-
-                <div className="my-8">
-                <img src={userWaiver.signature} alt="signature"/>
-                </div>
-          
-            :
-            <>
-              <div className="signature-container">
-                <SignatureCanvas
-                  ref={sigCanvas}
-                  penColor='black'
-                  canvasProps={{ className: 'sigCanvas' }}
-                  onEnd={handleSignatureChange}
-                />
+              <Typography variant="body1" className="pb-4">
+                {waiver.waiverData.activity_details.description}
+              </Typography>
+              <Typography variant="h5" className="text-3xl font-semibold mb-4">
+                {waiver.waiverData.consideration.title}
+              </Typography>
+              <Typography variant="body1" className="pb-4">
+                {waiver.waiverData.consideration.description}
+              </Typography>
+              <Typography variant="h5" className="text-3xl font-semibold mb-4">
+                {waiver.waiverData.concurrent_release.title}
+              </Typography>
+              <Typography variant="body1" className="pb-4">
+                {waiver.waiverData.concurrent_release.description}
+              </Typography>
+              <Typography variant="h5" className="text-3xl font-semibold mb-4">
+                {waiver.waiverData.fitness_to_participate.title}
+              </Typography>
+              <Typography variant="body1" className="pb-4">
+                {waiver.waiverData.fitness_to_participate.description}
+              </Typography>
+              <Typography variant="h5" className="text-3xl font-semibold mb-4">
+                {waiver.waiverData.full_and_final_settlement.title}
+              </Typography>
+              <Typography variant="body1" className="pb-4">
+                {waiver.waiverData.full_and_final_settlement.description}
+              </Typography>
+              <Typography variant="h5" className="text-3xl font-semibold mb-4">
+                {waiver.waiverData.refund_policy.title}
+              </Typography>
+              <br />
+              {waiver.waiverData.refund_policy.sections.map((section, index) => (
+                <Fragment key={index}>
+                  <Typography variant="body1" className="pb-4">
+                    {section.description}
+                  </Typography>
+                </Fragment>
+              ))}
+              <FormGroup className="pb-4">
+                {checks.map((check, index) => (
+                  <FormControlLabel
+                    key={index}
+                    control={
+                      <Checkbox
+                        checked={check.value || userWaiver.signed}
+                        disabled={userWaiver.signed}
+                        onChange={() => handleCheckboxChange(index)}
+                      />
+                    }
+                    label={check.label}
+                  />
+                ))}
+              </FormGroup>
+              <div>
+                {userWaiver.signed ? (
+                  <div className="my-8">
+                    <img src={userWaiver.signature} alt="signature" />
+                  </div>
+                ) : (
+                  <>
+                    <div className="signature-container">
+                      <SignatureCanvas
+                        ref={sigCanvas}
+                        penColor="black"
+                        canvasProps={{ className: 'sigCanvas' }}
+                        onEnd={handleSignatureChange}
+                      />
+                    </div>
+                    <div className="flex flex-row justify-end">
+                      <Button
+                        onClick={clear}
+                        variant="contained"
+                        color="primary"
+                        sx={{ marginBottom: "10px" }}
+                      >
+                        Clear
+                      </Button>
+                    </div>
+                  </>
+                )}
               </div>
-              
-              <div className="flex flex-row justify-end">
+              <Button
+                onClick={handleSignWaiver}
+                variant="contained"
+                color="primary"
+                className="w-full"
+                sx={{ marginBottom: "10px" }}
+                disabled={
+                  !checks.every(check => check.value) || userWaiver.signed || isSignatureEmpty
+                }
+              >
+                {userWaiver.signed ? "Signed" : "Sign Waiver"}
+              </Button>
+              {isTeamCaptain && (
                 <Button
-                  onClick={clear}
+                  onClick={makePayment}
                   variant="contained"
-                  color="primary"
-                  sx={{ marginBottom: "10px" }}
+                  color="secondary"
+                  className="w-full"
+                  sx={{ marginBottom: "40px" }}
+                  disabled={!userWaiver.signed || paymentStatus}
                 >
-                  Clear
+                  Pay Now
                 </Button>
-              </div>
-            </>
-          }
-          </div>
-          <Button
-            onClick={handleSignWaiver}
-            variant="contained"
-            color="primary"
-            className="w-full"
-            sx={{ marginBottom: "10px" }}
-            disabled={!checks.every(check => check.value) || userWaiver.signed || isSignatureEmpty}
-          >
-            {userWaiver.signed ? "Signed" : "Sign Waiver"}
-          </Button>
-          {isTeamCaptain && (
-            <Button
-              onClick={makePayment}
-              variant="contained"
-              color="secondary"
-              className="w-full"
-              sx={{ marginBottom: "40px" }}
-              disabled={!userWaiver.signed || paymentStatus}
-            >
-              Pay Now
-            </Button>
-          )}
-        </Box>
-        :
-        <></>
-      }
+              )}
+            </Box>
+          )
+        )}
     </Container>
 
   );

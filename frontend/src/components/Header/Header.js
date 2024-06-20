@@ -3,15 +3,15 @@ import { Button } from "@mui/material";
 import "./Header.css";
 import Logo from "../../media/logo.png";
 import { Link, useNavigate } from "react-router-dom";
-import { signOut,getToken } from "../../api/userService";
+import { signOut, getUserId } from "../../api/userService";
 
 function Header() {
 
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
   useEffect(()=>{
-    const token = getToken();
-    if (token){
+    const userId = getUserId();
+    if (userId){
       setLoggedIn(true);
     }
     else{
@@ -40,6 +40,12 @@ function Header() {
         <Link to={"/contactus"}>Contact Us</Link>
         {/* <Link to={"/schedule"}>Schedule</Link> */}
         <Link to={"/teams"}>Teams</Link>
+        {loggedIn ? 
+         <Link to={"/waiver"}>Waiver</Link>
+         :
+          <></>
+        }
+        
       </div>
 
       {loggedIn ? 
