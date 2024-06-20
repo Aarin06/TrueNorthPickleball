@@ -73,7 +73,7 @@ const createUser = async (req, res) => {
   try {
     const exists = await User.findOne({ email: userData.email });
     if (exists) {
-      return res.status(422).json({ message: "This Email is taken." });
+      return res.status(409).json({ message: "This Email is taken." });
     }
 
     const user = await User.create(userData);

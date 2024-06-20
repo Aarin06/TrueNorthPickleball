@@ -283,9 +283,9 @@ function Signup() {
 
       })
       .catch((error) => {
-        setErr(error.message);
+        setErr(error.response.data.message || "");
         console.log("There was a problem with the fetch operation:", error.message || error);
-      });
+      })
     }
   };
 
