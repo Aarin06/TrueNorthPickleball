@@ -8,6 +8,10 @@ const waiverSchema = new mongoose.Schema({
     signed: {
       type: Boolean,
       required: true,
+    },
+    deletedOn: {
+      type: Date,
+      default: null,
     }
   }, { timestamps: true });
 

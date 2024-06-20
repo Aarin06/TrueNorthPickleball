@@ -20,6 +20,10 @@ const teamSchema = new mongoose.Schema({
     locked: {
       type: Boolean,
       required: true,
+    },
+    deletedOn: {
+      type: Date,
+      default: null,
     }
 }, { timestamps: true });
 

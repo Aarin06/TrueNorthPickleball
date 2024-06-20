@@ -8,6 +8,10 @@ const teamMember = new mongoose.Schema({
     userId: {
         type: String,
         required: true,
+    },
+    deletedOn: {
+      type: Date,
+      default: null,
     }
 }, { timestamps: true });
 

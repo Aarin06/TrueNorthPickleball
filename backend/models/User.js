@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema({
     emergContactRelationship: {
       type: String,
       required: true,
+    },
+    deletedOn: {
+      type: Date,
+      default: null,
     }
 }, { timestamps: true });
 
