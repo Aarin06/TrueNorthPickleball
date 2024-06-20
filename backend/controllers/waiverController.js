@@ -7,7 +7,7 @@ import UserWaiver from '../models/UserWaiver.js';
 const getWaiver = async (req, res) => {
   // const { id } = req.params;
 
-  const id = "6673da6f3404039306933d1d";
+  const id = "6673e6f6fb3c11e87172eb3d";
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such waiver' });
@@ -24,7 +24,6 @@ const getWaiver = async (req, res) => {
 
 const signWaiver = async (req, res) => {
   const { userId, waiverId, signature, checks  } = req.body;
-  console.log(checks)
   try {
     const userExists = await User.findOne({ _id: userId });
     if (!userExists) {

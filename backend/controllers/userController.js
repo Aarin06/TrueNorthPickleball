@@ -51,7 +51,7 @@ const createUser = async (req, res) => {
     const waiverData = {
       userId:user._id,
       signed: false,
-      waiverId: "6673da6f3404039306933d1d",
+      waiverId: "6673e6f6fb3c11e87172eb3d",
       checks:[
         {
           label: "I understand that there are no refunds for this summer league 2024 season.",
