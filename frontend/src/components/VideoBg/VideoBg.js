@@ -19,26 +19,27 @@ function VideoBg() {
 
   return (
     <div className="main">
-
-      <video autoPlay loop muted id="video">
-      <source src={videoBg} type="video/mp4"/>
-      </video>
-      <div className="" dangerouslySetInnerHTML={{ __html: `
-        <video playsinline autoPlay loop muted autobuffer id="video">
-          <source src={videoBg} type="video/mp4"/>
-        </video>           
-    ` }}></div>
+      <div 
+        className="video-bg"
+        dangerouslySetInnerHTML={{ __html: `
+          <video playsinline autoPlay loop muted autobuffer id="video">
+            <source src="${videoBg}" type="video/mp4"/>
+          </video>
+        ` }}>
+      </div>
       <div className="overlay"></div>
       <div className="content">
-        <h1>{user ? "Hey " + user.firstName + ", Welcome to Northern PickleBall." : "Welcome to Northern PickleBall."}</h1>
-        {!userId && <Button
-          LinkComponent={Link}
-          to="/join"
-          variant="contained"
-          sx={{ fontSize: "50px", borderRadius: "70px", padding: "5px 40px", marginTop:"10px" }}
-        >
-          Join Now
-        </Button>}
+        <h1>{user ? `Hey ${user.firstName}, Welcome to Northern Pickleball` : "Welcome to Northern Pickleball."}</h1>
+        {!userId && (
+          <Button
+            LinkComponent={Link}
+            to="/join"
+            variant="contained"
+            sx={{ fontSize: "50px", borderRadius: "70px", padding: "5px 40px", marginTop:"10px" }}
+          >
+            Join Now
+          </Button>
+        )}
       </div>
     </div>
   );
