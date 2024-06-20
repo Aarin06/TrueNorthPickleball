@@ -199,7 +199,7 @@ const makeTeamPayment = async (req, res) => {
       currency: "cad",
       product_data: {
         name: "Northern Pickleball 2024 Summer League Pass",
-        description: "One time league pass for the 2024 Northern Pickleball League. Includes: 7 weeks of play plus an all-day tournament during the final week, Grand prize worth up to $400, Lessons during first week of play for beginners."
+        description: "One time league pass for the 2024 Northern Pickleball Summer League. Includes: 7 weeks of play plus an all-day tournament during the final week, Grand prize worth up to $400, Lessons during first week of play for beginners."
       },
       unit_amount: 30000 // Amount in cents
     },
