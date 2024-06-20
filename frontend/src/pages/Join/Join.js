@@ -7,41 +7,39 @@ function Join() {
   return (
     <Container maxWidth="xl" className="py-8">
       <Box className="text-center mb-8">
-        <Typography variant="h2" className="text-4xl font-bold mb-8">
-          Join Now
-        </Typography>
+        <div className=" text-6xl font-normal mb-8">
+          Summer League Signup
+        </div>
       </Box>
       
-      <Box className="mb-16">
-        <Typography variant="h3" className="text-3xl font-semibold mb-4">
-          Why Join Us?
-        </Typography>
-        <Typography variant="body1" className="mb-4">
-          Becoming a member of our community means gaining access to exclusive events, resources, and a network of like-minded individuals who share your passion.
-        </Typography>
-        <br />
-        <Typography variant="body1" className="mb-4">
-          We offer a variety of activities and programs designed to help you grow and connect with others. Whether you're looking to learn something new or just want to meet new people, we have something for everyone.
-        </Typography>
-      </Box>
       
       <Box className="mb-16">
-        <Typography variant="h3" className="text-3xl font-semibold mb-4">
-          Membership Benefits
-        </Typography>
-        <Typography variant="body1" className="mb-4">
-          As a member, you will enjoy benefits such as:
-        </Typography>
-        <ul className="list-disc list-inside mb-4">
-          <li>Access to exclusive events and workshops</li>
-          <li>Discounts on our services and products</li>
-          <li>Networking opportunities with industry leaders</li>
-          <li>Regular updates and newsletters</li>
+        <div className=" text-4xl font-normal mb-8">
+          How It Works
+        </div>
+        <div className=" text-xl font-normal mb-8">
+        By signing up you can expect the following:
+        </div>
+        <ul className="list-disc list-inside mb-4 font-light">
+          <li>This season runs from July 7 - August 25 every Sunday </li>
+          <li>Each week your team will play 1 Match any time between 10AM - 1PM </li>
+          <li>The match will consist of 3 Games up to 11 using traditional pickle ball scoring </li>
+          <li>If you are a beginner we will provide a Padel and lessons to learn the sport during your first week (no additional cost)</li>
+          <li>Our final week of the season (August 25) will consist of tournament where all teams will participate and compete for prizes</li>
+
+          <li>All Matches are played outside and details will be sent to you upon sign up </li>
+          <li>If there is a weather delay matches will be rescheduled later in the same calendar week.</li>
+          <li>When you sign up you will create a team and are expected to have 2 players represent to play weekly </li>
+          <li>Each team can have a maximum of 5 Available players </li>
         </ul>
-        <Typography variant="body1" className="mb-4">
-          Join us today and start enjoying these amazing benefits!
-        </Typography>
+        <div className=" text-xl font-normal mb-8">
+          There will be healthy refreshments provided weekly and also a super cool grand prize for the league winners that win the tournament.
+        </div>
+        <div className=" text-xl font-normal mb-8">
+        The cost is $300 per team for the entire season.        
+      </div>
       </Box>
+
       
       <Box className="text-center">
         <Button 
