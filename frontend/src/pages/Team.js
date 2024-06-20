@@ -37,6 +37,9 @@ function Team() {
             setJoined(true);
           }
         })
+      })
+      .catch((err) =>{
+        
       });
     });
 

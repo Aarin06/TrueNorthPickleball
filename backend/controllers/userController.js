@@ -2,7 +2,7 @@ import User from '../models/User.js';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import Waiver from '../models/Waiver.js';
+import UserWaiver from '../models/UserWaiver.js';
 import TeamMember from '../models/TeamMember.js';
 
 // Get all users
@@ -32,35 +32,6 @@ const getUser = async (req, res) => {
   }
 };
 
-// Get a single user by ID
-const getWaiver = async (req, res) => {
-  const { id } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: 'No such waiver' });
-  }
-
-  const waiver = await Waiver.findOne({userId: id});
-
-  if (!waiver) {
-    return res.status(404).json({ error: 'No such waiver' });
-  }
-
-  res.status(200).json(waiver);
-};
-
-// Get the current user based on session
- const getMe = async (req, res) => {
-  if (!req.user || !req.user.userId) {
-    return res.status(401).json({ error: "User ID not found in request." });
-  }
-
-  const user = await User.findById(req.user.userId);
-
-
-  res.json(user);
-};
-
 // Create a new user
 const createUser = async (req, res) => {
   const { userData } = req.body;
@@ -79,35 +50,24 @@ const createUser = async (req, res) => {
     const user = await User.create(userData);
     const waiverData = {
       userId:user._id,
-      signed: false
+      signed: false,
+      waiverId: "6673bb5419ddc14265a44bfa",
+      checks:[
+        {
+          label: "I understand that there are no refunds for this summer league 2024 season.",
+          value: false,
+        },
+        {
+          label: "I acknowledge that games may be delayed, rescheduled and maybe cancelled due to weather conditions.",
+          value: false,
+        },
+      ]
     }
     
-    await Waiver.create(waiverData);
+    await UserWaiver.create(waiverData);
     
     user.password = pass;
     res.status(200).json(user);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
-const signWaiver = async (req, res) => {
-  const { userId } = req.body;
-
-  try {
-    const exists = await User.findOne({ _id: userId });
-    if (!exists) {
-      return res.status(422).json({ message: "Unable to sign waiver" });
-    }
-    const waiverData = {
-      userId:userId,
-      signed: true
-    }
-    const waiver = await Waiver.updateOne(waiverData);
-
-    const finalWaiver = await Waiver.findOne({userId: userId});
-    
-    res.status(200).json(finalWaiver);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -143,6 +103,18 @@ const signIn = async (req, res) => {
   }
 };
 
+// Get the current user based on session
+const getMe = async (req, res) => {
+  if (!req.user || !req.user.userId) {
+    return res.status(401).json({ error: "User ID not found in request." });
+  }
+
+  const user = await User.findById(req.user.userId);
+
+
+  res.json(user);
+};
+
 // Sign out a user
 const signOut = async (req, res) => {
   return res.status(200).json({});
@@ -154,7 +126,5 @@ export {
   createUser, 
   signIn, 
   signOut, 
-  getMe,
-  signWaiver,
-  getWaiver 
+  getMe
 };

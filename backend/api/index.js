@@ -3,6 +3,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import userRoutes from '../routes/userRoutes.js';
 import teamRoutes from '../routes/teamRoutes.js';
+import waiverRoutes from '../routes/waiverRoutes.js';
+import bodyParser from 'body-parser';
 import stripeWebhook from '../routes/paymentRoutes.js';
 import session from 'express-session';
 import cors from 'cors';
@@ -23,11 +25,13 @@ app.use(session({
   }
 }));
 
+//must go before express.json
 app.use('/api/stripewebhook', stripeWebhook);
 
 
 // middleware
 app.use(express.json());
+app.use(bodyParser.json({ limit: '10mb' }));
 app.use(cors({
   origin: ['https://northernpickleball.ca','http://localhost:3000'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -68,6 +72,7 @@ if (!mongoUri) {
 // routes
 app.use('/api/users', userRoutes);
 app.use('/api/teams', teamRoutes);
+app.use('/api/waivers', waiverRoutes);
 
 // connect to db
 mongoose.connect(mongoUri)

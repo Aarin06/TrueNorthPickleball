@@ -1,82 +1,122 @@
 import axios from 'axios';  // Ensure axios is imported correctly
-const SERVER_URL = "https://true-north-pickleball.vercel.app";
-// const SERVER_URL = "http://localhost:4000";
+// const SERVER_URL = "https://true-north-pickleball.vercel.app";
+const SERVER_URL = "http://localhost:4000";
 
 axios.defaults.withCredentials = true;
+const getToken = () => localStorage.getItem('token') || null;
 
-const addTeam = function (teamData) {
-  return axios.post(SERVER_URL + "/api/teams", { teamData: teamData })
-    .then((res) => res.data)
-    .catch((error) => {
-      console.error('There was a problem with the axios operation:', error);
-    });
+const addTeam = async (teamData) => {
+  try {
+    const response = await axios.post(SERVER_URL + "/api/teams", { teamData: teamData });
+    return response.data;
+  } catch (error) {
+    console.error('There was a problem with the axios operation:', error);
+    throw error;
+  }
 };
 
-const joinTeam = function (teamName, userId) {
-  return axios.post(SERVER_URL + "/api/teams/join", { teamName: teamName, userId: userId })
-    .then((res) => res.data)
-    .catch((error) => {
-      console.error('There was a problem with the axios operation:', error);
-    });
+const joinTeam = async (teamName, userId) => {
+  try {
+    const response = await axios.post(SERVER_URL + "/api/teams/join", { teamName: teamName, userId: userId });
+    return response.data;
+  } catch (error) {
+    console.error('There was a problem with the axios operation:', error);
+    throw error;
+  }
 };
 
-const getTeams = function () {
-  return axios.get(SERVER_URL + "/api/teams")
-    .then((res) => res.data)
-    .catch((error) => {
-      console.error('There was a problem with the axios operation:', error);
-    });
+const getTeams = async () => {
+  try {
+    const response = await axios.get(SERVER_URL + "/api/teams");
+    return response.data;
+  } catch (error) {
+    console.error('There was a problem with the axios operation:', error);
+    throw error;
+  }
 };
 
-const getTeam = function (teamId) {
-  return axios.get(SERVER_URL + `/api/teams/${teamId}`)
-    .then((res) => res.data)
-    .catch((error) => {
-      console.error('There was a problem with the axios operation:', error);
-    });
+const getTeam = async (teamId) => {
+  try {
+    const response = await axios.get(SERVER_URL + `/api/teams/${teamId}`);
+    return response.data;
+  } catch (error) {
+    console.error('There was a problem with the axios operation:', error);
+    throw error;
+  }
 };
 
-const getPayment = function (teamId) {
-  return axios.get(SERVER_URL + `/api/teams/${teamId}/payment`)
-    .then((res) => res.data)
-    .catch((error) => {
-      console.error('There was a problem with the axios operation:', error);
-      throw error;
+const getPayment = async (teamId) => {
+  try {
+    const token = getToken();
+    if (!token) {
+      throw new Error('No token found');
+    }
+    const response = await axios.get(SERVER_URL + `/api/teams/${teamId}/payment`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
+    return response.data;
+  } catch (error) {
+    console.error('There was a problem with the axios operation:', error);
+    throw error;
+  }
 };
 
-const getTeamCaptain = function (teamId) {
-  return axios.get(SERVER_URL + `/api/teams/${teamId}/captain`)
-    .then((res) => res.data)
-    .catch((error) => {
-      console.error('There was a problem with the axios operation:', error);
-    });
+const getTeamCaptain = async (teamId) => {
+  try {
+    const response = await axios.get(SERVER_URL + `/api/teams/${teamId}/captain`);
+    return response.data;
+  } catch (error) {
+    console.error('There was a problem with the axios operation:', error);
+    throw error;
+  }
 };
 
-const getRoster = function (teamId) {
-  return axios.get(SERVER_URL + `/api/teams/${teamId}/roster`)
-    .then((res) => res.data)
-    .catch((error) => {
-      console.error('There was a problem with the axios operation:', error);
-    });
+const getRoster = async (teamId) => {
+  try {
+    const response = await axios.get(SERVER_URL + `/api/teams/${teamId}/roster`);
+    return response.data;
+  } catch (error) {
+    console.error('There was a problem with the axios operation:', error);
+    throw error;
+  }
 };
 
-const makeTeamPayment = function (teamId, userId) {
-  return axios.post(`${SERVER_URL}/api/teams/payment`, { teamId, userId })
-    .then((res) => res.data)
-    .catch((error) => {
-      console.error('There was a problem with the axios operation:', error);
-      throw error; // Re-throw the error to allow further handling if needed
+const makeTeamPayment = async (teamId, userId) => {
+  try {
+    const token = getToken();
+    if (!token) {
+      throw new Error('No token found');
+    }
+    const response = await axios.post(`${SERVER_URL}/api/teams/payment`, { teamId, userId }, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
+    return response.data;
+  } catch (error) {
+    console.error('There was a problem with the axios operation:', error);
+    throw error; // Re-throw the error to allow further handling if needed
+  }
 };
 
-const handlePostPayment = function (teamId, userId, status) {
-  return axios.post(`${SERVER_URL}/api/teams/postpayment`, { teamId, userId, status })
-    .then((res) => res.data)
-    .catch((error) => {
-      console.error('There was a problem with the axios operation:', error);
-      throw error; // Re-throw the error to allow further handling if needed
+const handlePostPayment = async (teamId, userId, status) => {
+  try {
+    const token = getToken();
+    if (!token) {
+      throw new Error('No token found');
+    }
+    const response = await axios.post(`${SERVER_URL}/api/teams/postpayment`, { teamId, userId, status }, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
+    return response.data;
+  } catch (error) {
+    console.error('There was a problem with the axios operation:', error);
+    throw error; // Re-throw the error to allow further handling if needed
+  }
 };
 
 export {

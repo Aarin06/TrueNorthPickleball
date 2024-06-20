@@ -16,7 +16,8 @@ import Team from "./pages/Team";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import HeaderMobile from "./components/Header/HeaderMobile";
 import AboutUs from "./pages/AboutUs";
-import Schedule from "./pages/Schedule";
+// import Schedule from "./pages/Schedule";
+import ContactUs from "./pages/ContactUs";
 import { getUserId } from "./api/userService";
 import Waiver from "./pages/Waiver";
 import PaymentSuccess from "./pages/PaymentSuccess";
@@ -59,6 +60,14 @@ const loggedInRouter = createBrowserRouter([
     )
   },
   {
+    path: "/contactus",
+    element: (
+      <Layout>
+        <ContactUs />
+      </Layout>
+    )
+  },
+  {
     path: "/teams",
     element: (
       <Layout>
@@ -74,14 +83,14 @@ const loggedInRouter = createBrowserRouter([
       </Layout>
     )
   },
-  {
-    path: "/schedule",
-    element: (
-      <Layout>
-        <Schedule />
-      </Layout>
-    )
-  },
+  // {
+  //   path: "/schedule",
+  //   element: (
+  //     <Layout>
+  //       <Schedule />
+  //     </Layout>
+  //   )
+  // },
   {
     path: "/waiver",
     element: (
@@ -147,6 +156,14 @@ const router = createBrowserRouter([
     )
   },
   {
+    path: "/contactus",
+    element: (
+      <Layout>
+        <ContactUs />
+      </Layout>
+    )
+  },
+  {
     path: "/teams",
     element: (
       <Layout>
@@ -162,14 +179,14 @@ const router = createBrowserRouter([
       </Layout>
     )
   },
-  {
-    path: "/schedule",
-    element: (
-      <Layout>
-        <Schedule />
-      </Layout>
-    )
-  },
+  // {
+  //   path: "/schedule",
+  //   element: (
+  //     <Layout>
+  //       <Schedule />
+  //     </Layout>
+  //   )
+  // },
   {
     path: "/join",
     element: (

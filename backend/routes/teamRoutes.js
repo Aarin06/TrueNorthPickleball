@@ -11,6 +11,7 @@ import {
   handlePostPayment,
   getPayment
 } from '../controllers/teamController.js';
+import { authorize } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -33,10 +34,10 @@ router.post('/join', joinTeam);
 router.get('/:id', getTeam);
 
 // GET a single workout
-router.get('/:id/payment', getPayment);
+router.get('/:id/payment',authorize, getPayment);
 
-// UPDATE a workout
-router.patch('/:id', updateTeam);
+// // UPDATE a workout
+// router.patch('/:id', updateTeam);
 
 // POST a new workout
 router.get('/:id/captain', getTeamCaptain);
