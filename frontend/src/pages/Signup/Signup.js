@@ -16,12 +16,11 @@ function Signup() {
   const [create, setCreate] = useState(false);
   const [err, setErr] = useState("");
 
-
   const [state, setState] = useState(0);
   const [team, setTeam] = useState([
     {
       label: "Team Name",
-      key:"name",
+      key: "name",
       value: "",
       helperText: "",
       error: false,
@@ -29,7 +28,7 @@ function Signup() {
     },
     {
       label: "Experience",
-      key:"experienceLevel",
+      key: "experienceLevel",
       value: "",
       helperText: "",
       error: false,
@@ -54,7 +53,7 @@ function Signup() {
   const [emergencyFields, SetEmergencyFields] = useState([
     {
       label: "Contact Name",
-      key:"emergContactName",
+      key: "emergContactName",
       value: "",
       helperText: "",
       error: false,
@@ -63,7 +62,7 @@ function Signup() {
     },
     {
       label: "Phone Number",
-      key:"emergContactPhoneNumber",
+      key: "emergContactPhoneNumber",
       value: "",
       helperText: "",
       error: false,
@@ -72,7 +71,7 @@ function Signup() {
     },
     {
       label: "Relationship",
-      key:"emergContactRelationship",
+      key: "emergContactRelationship",
       value: "",
       helperText: "",
       error: false,
@@ -84,7 +83,7 @@ function Signup() {
   const [fields, setFields] = useState([
     {
       label: "First Name",
-      key:"firstName",
+      key: "firstName",
       value: "",
       helperText: "",
       error: false,
@@ -93,7 +92,7 @@ function Signup() {
     },
     {
       label: "Last Name",
-      key:"lastName",
+      key: "lastName",
       value: "",
       helperText: "",
       error: false,
@@ -102,7 +101,7 @@ function Signup() {
     },
     {
       label: "Password",
-      key:"password",
+      key: "password",
       value: "",
       helperText: "",
       error: false,
@@ -111,7 +110,7 @@ function Signup() {
     },
     {
       label: "Confirm Password",
-      key:"confirmPassword",
+      key: "confirmPassword",
       value: "",
       helperText: "",
       error: false,
@@ -120,7 +119,7 @@ function Signup() {
     },
     {
       label: "Email",
-      key:"email",
+      key: "email",
       value: "",
       helperText: "",
       error: false,
@@ -129,11 +128,20 @@ function Signup() {
     },
     {
       label: "Phone Number",
-      key:"phoneNumber",
+      key: "phoneNumber",
       value: "",
       helperText: "",
       error: false,
       change: (value) => updateField("Phone Number", value),
+      size: 12,
+    },
+    {
+      label: "Date of Birth (MM/DD/YYYY)",
+      key: "dob",
+      value: "",
+      helperText: "",
+      error: false,
+      change: (value) => updateField("Date of Birth (MM/DD/YYYY)", value),
       size: 12,
     },
   ]);
@@ -143,8 +151,8 @@ function Signup() {
       prevTeam.map((field) =>
         field.label === label
           ? { ...field, value, helperText: "", error: false }
-          : field,
-      ),
+          : field
+      )
     );
   };
 
@@ -153,8 +161,8 @@ function Signup() {
       prevFields.map((field) =>
         field.label === label
           ? { ...field, value, helperText: "", error: false }
-          : field,
-      ),
+          : field
+      )
     );
   };
 
@@ -163,9 +171,28 @@ function Signup() {
       prevFields.map((field) =>
         field.label === label
           ? { ...field, value, helperText: "", error: false }
-          : field,
-      ),
+          : field
+      )
     );
+  };
+
+  const calculateAge = (dob) => {
+    const regex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
+    
+    if (regex.test(dob)) {
+      const birthDate = new Date(dob);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+  
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+  
+      return age;
+    }
+    return 0;
+    
   };
 
   const handleSubmission = () => {
@@ -210,6 +237,15 @@ function Signup() {
         };
       }
 
+      if (field.label === "Date of Birth (MM/DD/YYYY)" && calculateAge(field.value.trim()) < 18) {
+        allFieldsValid = false;
+        return {
+          ...field,
+          helperText: "You must be at least 18 years old",
+          error: true,
+        };
+      }
+
       return field;
     });
     setFields(updatedFields);
@@ -239,54 +275,45 @@ function Signup() {
 
     if (allFieldsValid) {
       // Handle the actual submission here
-      let userData = [...fields, ...emergencyFields ];
+      let userData = [...fields, ...emergencyFields];
 
       userData = userData.reduce((acc, field) => {
         acc[field.key] = field.value;
         return acc;
       }, {});
-      
+
       let teamData = team.reduce((acc, field) => {
         acc[field.key] = field.value;
         return acc;
       }, {});
 
-
-      delete userData.confirmPassword
+      delete userData.confirmPassword;
 
       addUser(userData)
-      .then((responseUser) => {
+        .then((responseUser) => {
+          teamData.captain = responseUser._id;
 
-        teamData.captain = responseUser._id;
-
-        if (create) {
-          addTeam(teamData).then((responseTeam) => {
-            
-            signIn(responseUser).then((res) =>{
-              
-              navigate(`/waiver?teamId=${responseTeam._id}`);
-              window.location.reload();
-            })
-          });
-        } else {
-          joinTeam(team[0].value, responseUser.userId).then((responseTeam) => {
-            
-            signIn(responseUser).then((res) =>{
-              
-              // navigate(`/waiver?teamId=${responseTeam._id}`);
-              navigate(`/waiver`);
-              window.location.reload();
-            })
-          });
-        }
-
-      
-
-      })
-      .catch((error) => {
-        setErr(error.response.data.message || "");
-        console.log("There was a problem with the fetch operation:", error.message || error);
-      })
+          if (create) {
+            addTeam(teamData).then((responseTeam) => {
+              signIn(responseUser).then((res) => {
+                // navigate(`/waiver?teamId=${responseTeam._id}`);
+                // window.location.reload();
+              });
+            });
+          } else {
+            joinTeam(team[0].value, responseUser.userId).then((responseTeam) => {
+              signIn(responseUser).then((res) => {
+                // navigate(`/waiver?teamId=${responseTeam._id}`);
+                // navigate(`/waiver`);
+                // window.location.reload();
+              });
+            });
+          }
+        })
+        .catch((error) => {
+          setErr(error.response.data.message || "");
+          console.log("There was a problem with the fetch operation:", error.message || error);
+        });
     }
   };
 
@@ -295,8 +322,7 @@ function Signup() {
     let allFieldsValidJoin = true;
     const updatedTeam = team.map((field) => {
       if (field.value.trim() === "") {
-        if (field.label === "Team Name")
-          allFieldsValidJoin = false;
+        if (field.label === "Team Name") allFieldsValidJoin = false;
         allFieldsValidCreate = false;
         return {
           ...field,
@@ -322,8 +348,9 @@ function Signup() {
                 onClick={() => {
                   setState(1);
                   setCreate(true);
-                  setTeam(prevTeam => prevTeam.map(item => ({ ...item, value: "", error:false,helperText:""})));
-
+                  setTeam((prevTeam) =>
+                    prevTeam.map((item) => ({ ...item, value: "", error: false, helperText: "" }))
+                  );
                 }}
                 variant="contained"
               >
@@ -333,8 +360,9 @@ function Signup() {
                 onClick={() => {
                   setState(1);
                   setCreate(false);
-                  setTeam(prevTeam => prevTeam.map(item => ({ ...item, value: "", error:false,helperText:""})));
-
+                  setTeam((prevTeam) =>
+                    prevTeam.map((item) => ({ ...item, value: "", error: false, helperText: "" }))
+                  );
                 }}
                 variant="contained"
               >
@@ -347,7 +375,12 @@ function Signup() {
         ) : state === 1 && !create ? (
           <JoinTeam team={team[0]} />
         ) : state === 2 ? (
-          <CreateAccount fields={fields} emergencyFields={emergencyFields} handleSubmission={handleSubmission} error={err}/>
+          <CreateAccount
+            fields={fields}
+            emergencyFields={emergencyFields}
+            handleSubmission={handleSubmission}
+            error={err}
+          />
         ) : (
           <></>
         )}
