@@ -273,7 +273,8 @@ function Signup() {
             
             signIn(responseUser).then((res) =>{
               
-              navigate(`/waiver?teamId=${responseTeam._id}`);
+              // navigate(`/waiver?teamId=${responseTeam._id}`);
+              navigate(`/waiver`);
               window.location.reload();
             })
           });

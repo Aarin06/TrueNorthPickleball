@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 // Define the server URL
-const SERVER_URL = "https://true-north-pickleball.vercel.app";
-// const SERVER_URL = "http://localhost:4000";
+// const SERVER_URL = "https://true-north-pickleball.vercel.app";
+const SERVER_URL = "http://localhost:4000";
 
 // Set axios to include credentials in requests
 axios.defaults.withCredentials = true;
@@ -24,35 +24,18 @@ const addUser = async (userData) => {
   }
 };
 
-// Add a user function
-const signWaiver = async (userId) => {
+const getUser = async (userId) => {
   try {
     const token = getToken();
     if (!token) {
       throw new Error('No token found');
     }
-    const response = await axios.post(`${SERVER_URL}/api/users/waiver`, { userId });
-    return response.data;
-  } catch (error) {
-    console.error(error.message);
-    throw error;
-  }
-};
 
-// Get current user function
-const getWaiver = async () => {
-  try {
-    const response = await axios.get(`${SERVER_URL}/api/users/waiver/${getUserId()}`, { withCredentials: true });
-    return response.data;
-  } catch (error) {
-    console.error('There was a problem with the axios operation:', error);
-    throw error;
-  }
-};
-
-const getUser = async (userId) => {
-  try {
-    const response = await axios.get(`${SERVER_URL}/api/users/${userId}`, { withCredentials: true });
+    const response = await axios.get(`${SERVER_URL}/api/users/${userId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     return response.data;
   } catch (error) {
     console.error('There was a problem with the axios operation:', error);
@@ -122,8 +105,6 @@ export {
   getMe,
   getToken,
   getUserId,
-  signWaiver,
-  getWaiver,
   getTeamId,
   getUser
 };

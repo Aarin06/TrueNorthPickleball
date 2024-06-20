@@ -37,7 +37,8 @@ function Header() {
           Northern Pickleball
         </Link>
         <Link to={"/aboutus"}>About Us</Link>
-        <Link to={"/schedule"}>Schedule</Link>
+        <Link to={"/contactus"}>Contact Us</Link>
+        {/* <Link to={"/schedule"}>Schedule</Link> */}
         <Link to={"/teams"}>Teams</Link>
       </div>
 

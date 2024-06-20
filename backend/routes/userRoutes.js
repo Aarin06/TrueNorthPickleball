@@ -5,9 +5,7 @@ import {
   createUser, 
   signIn, 
   signOut, 
-  getMe,
-  signWaiver,
-  getWaiver
+  getMe
 } from '../controllers/userController.js';
 import { authorize } from '../middleware/auth.js';
 
@@ -21,11 +19,6 @@ router.get('/', getUsers);
 router.post('/', createUser);
 
 // POST to sign in
-router.post('/waiver', signWaiver);
-// POST to sign in
-router.get('/waiver/:id', getWaiver);
-
-// POST to sign in
 router.post('/signin', signIn);
 
 // GET to sign out
@@ -35,6 +28,6 @@ router.get('/signout', signOut);
 router.get('/me', authorize, getMe);
 
 // GET a single user by ID
-router.get('/:id', getUser);
+router.get('/:id', authorize, getUser);
 
 export default router;
