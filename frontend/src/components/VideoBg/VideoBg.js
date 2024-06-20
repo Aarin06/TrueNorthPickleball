@@ -29,7 +29,7 @@ function VideoBg() {
       </div>
       <div className="overlay"></div>
       <div className="content">
-        <h1>{user ? `Hey ${user.firstName}, Welcome to Northern Pickleball` : "Welcome to Northern Pickleball."}</h1>
+        <h1>{user ? `Hey ${user.firstName}, Welcome to Northern Pickleball` : "Welcome to Northern Pickleball"}</h1>
         {!userId && (
           <Button
             LinkComponent={Link}
