@@ -33,6 +33,7 @@ const mainTheme = createTheme({
           "&:hover": {
             backgroundColor: "#ff332c", // Change background color on hover
           },
+          fontWeight:"200",
           minWidth: "80px",
           minHeight: "20px",
           textTransform: "none",
