@@ -198,7 +198,8 @@ const makeTeamPayment = async (req, res) => {
     price_data: {
       currency: "cad",
       product_data: {
-        name: "League Membership",
+        name: "Northern Pickleball 2024 Summer League Pass",
+        description: "Annual membership for the 2024 Northern Pickleball League. Includes:\n- 8 weeks of play plus an all-day tournament on the final day\n- Grand prize worth up to $400\n- Lessons during first week of play for beginners."
       },
       unit_amount: 30000 // Amount in cents
     },

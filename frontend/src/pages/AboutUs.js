@@ -38,6 +38,9 @@ function AboutUs() {
         <Typography variant="body1" className="mb-4">
         Experience love at first play! Pickleball is a sport for most ages (8-90) that is easy to play, active, inexpensive and promotes a healthy lifestyle. 
         </Typography>
+        <Typography variant="body1" className="mb-4">
+          Games will take palce at <a className=" text-blue-600 underline" href="https://www.google.com/maps/place/Fairgrounds+Assembly+Park/@43.7887105,-79.5535482,14z/data=!4m6!3m5!1s0x882b2f698e7d2419:0x7500b7846e31b76f!8m2!3d43.7887105!4d-79.5329488!16s%2Fg%2F11vyq2qwh_?entry=ttu" target="_blank" rel="noreferrer noopener">Fairgrounds Assembly Park.</a> 
+        </Typography>
         <br></br>
         <Typography variant="h5" className="mb-4">
         What is Pickleball and what do you need to get started?
