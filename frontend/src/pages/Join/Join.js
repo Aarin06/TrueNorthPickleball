@@ -29,7 +29,7 @@ function Join() {
           <li>All Matches are played outside and details will be sent to you upon sign up </li>
           <li>If there is a weather delay matches will be rescheduled later in the same calendar week.</li>
           <li>When you sign up you will create a team and are expected to have 2 players represent to play weekly </li>
-          <li>Each team can have a maximum of 5 Available players </li>
+          <li>Each team can have a maximum of 4 Available players </li>
           <li>Each player must be atleast 18 years of age. Please contact us at <a className=" text-blue-600 underline" href="mailto:northernpickleball@gmail.com">northernpickleball@gmail.com.</a> if you are younger and interested to join.</li>
         </ul>
         <div className=" font-normal text-xl mb-8">
