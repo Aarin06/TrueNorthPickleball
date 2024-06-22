@@ -46,8 +46,9 @@ function Team() {
   }, [params.teamId]);
 
 
-  const getStatusStyles = (locked, payment) => ({
-    color: locked === 0 || payment ? "green" : "red",
+  const getStatusStyles = (locked, payment) => (
+    {
+    color: !locked || payment ? "green" : "red",
     fontWeight: "bold",
   });
 
