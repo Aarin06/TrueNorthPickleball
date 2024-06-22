@@ -222,7 +222,8 @@ const makeTeamPayment = async (req, res) => {
 
 const handlePostPayment = async (userId, teamId, status) => {
   try {
-    const payment = await Payment.updateOne({ userId, teamId }, { status: status });
+    const payment = await Payment.updateOne({ userId, teamId }, { $set: { status: status } });
+    const team = await Team.updateOne({ _id: teamId, captain: userId }, { $set: { locked: !status } });
 
     return payment;
   } catch (error) {

@@ -47,7 +47,8 @@ function PaymentSuccess() {
       :<div className="mb-5">
         Page Not Found.
         </div>}
-      <Button
+        <div className="flex gap-5 justify-center">
+        <Button
         component={Link}
         to="/"
         variant="contained"
@@ -56,6 +57,17 @@ function PaymentSuccess() {
       >
         Go to Homepage
       </Button>
+      <Button
+        component={Link}
+        to={`/teams/${teamId}`}
+        variant="contained"
+        color="primary"
+        className="mt-4"
+      >
+        View My Team
+      </Button>
+        </div>
+      
     </Container>
   );
 }
