@@ -4,6 +4,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import UserWaiver from '../models/UserWaiver.js';
 import TeamMember from '../models/TeamMember.js';
+import 'dotenv/config';
+const jwtSecret = process.env.JWT_SECRET;
 
 // Get all users
 const getUsers = async (req, res) => {
@@ -96,7 +98,7 @@ const signIn = async (req, res) => {
     }
 
     // Returning JSON Web Token (search JWT for more explanation)
-    const token = jwt.sign({ userId: user._id }, "secret-key", { expiresIn: "1h" });
+    const token = jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: "1h" });
     res.status(201).json({ response: "User signed in successfully.", token, userId: user._id, teamId: team.teamId });
   } catch (error) {
     res.status(400).json({ error: error.message });
