@@ -23,7 +23,7 @@ const teamSchema = new mongoose.Schema({
     },
     deletedOn: {
       type: Boolean,
-      default: false,
+      default: null,
     }
 }, { timestamps: true });
 
