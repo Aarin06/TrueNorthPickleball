@@ -11,7 +11,7 @@ const stripe = stripeLib(stripeSecret);
 
 // get all workouts
 const getTeams = async (req, res) => {
-  const users = await Team.find({deletedOn:true}).sort({ createdAt: -1 });
+  const users = await Team.find({deletedOn:false}).sort({ createdAt: -1 });
 
   res.status(200).json(users);
 };
