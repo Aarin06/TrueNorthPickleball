@@ -11,7 +11,7 @@ const stripe = stripeLib(stripeSecret);
 
 // get all workouts
 const getTeams = async (req, res) => {
-  const users = await Team.find({}).sort({ createdAt: -1 });
+  const users = await Team.find({deletedOn:true}).sort({ createdAt: -1 });
 
   res.status(200).json(users);
 };
@@ -210,8 +210,8 @@ const makeTeamPayment = async (req, res) => {
     payment_method_types: ["card"],
     line_items: lineItems,
     mode: "payment",
-    success_url: `https://northernpickleball.ca/success`,
-    cancel_url: `https://northernpickleball.ca/failure`,
+    success_url: `http://localhost:3000/success`,
+    cancel_url: `http://localhost:3000/failure`,
     metadata: { userId, teamId } // Include userId and teamId in metadata here
   });
 
