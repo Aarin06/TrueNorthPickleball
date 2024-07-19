@@ -5,7 +5,7 @@ import TeamMember from '../models/TeamMember.js';
 import mongoose from 'mongoose';
 import stripeLib from 'stripe';
 import Payment from '../models/Payment.js';
-import EventParticipant from '../models/eventParticipant.js';
+import EventParticipant from '../models/EventParticipant.js';
 const stripeSecret = process.env.STRIPE_SECRET;
 const stripe = stripeLib(stripeSecret);
 

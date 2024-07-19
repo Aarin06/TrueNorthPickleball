@@ -3,7 +3,7 @@ import Team from '../models/Team.js';
 import mongoose from 'mongoose';
 import stripeLib from 'stripe';
 import Event from '../models/Event.js';
-import EventParticipant from '../models/eventParticipant.js';
+import EventParticipant from '../models/EventParticipant.js';
 const stripeSecret = process.env.STRIPE_SECRET;
 const stripe = stripeLib(stripeSecret);
 
