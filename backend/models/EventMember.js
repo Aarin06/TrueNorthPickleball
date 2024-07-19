@@ -19,4 +19,4 @@ const eventParticipantSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-export default mongoose.model('EventParticipant', eventParticipantSchema);
+export default mongoose.model('EventMember', eventParticipantSchema);

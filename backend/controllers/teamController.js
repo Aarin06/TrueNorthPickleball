@@ -5,7 +5,7 @@ import TeamMember from '../models/TeamMember.js';
 import mongoose from 'mongoose';
 import stripeLib from 'stripe';
 import Payment from '../models/Payment.js';
-import EventParticipant from '../models/EventParticipant.js';
+import EventMember from '../models/EventMember.js';
 const stripeSecret = process.env.STRIPE_SECRET;
 const stripe = stripeLib(stripeSecret);
 
@@ -225,7 +225,7 @@ const handlePostPayment = async (userId, teamId, status, eventId) => {
     console.log("userId", userId, "teamId", teamId, "status", status, "eventId", eventId);
     const payment = await Payment.updateOne({ userId, teamId, eventId }, { $set: { status: status } });
     const team = await Team.updateOne({ _id: teamId, captain: userId }, { $set: { locked: !status } });
-    const eventParticipant = await EventParticipant.findOneAndUpdate(
+    const eventParticipant = await EventMember.findOneAndUpdate(
       { teamId: teamId, eventId: eventId },
       { $set: { registered: status } },
       { upsert: true, new: true }  // upsert creates if not exists, new returns the modified document

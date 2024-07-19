@@ -3,7 +3,7 @@ import Team from '../models/Team.js';
 import mongoose from 'mongoose';
 import stripeLib from 'stripe';
 import Event from '../models/Event.js';
-import EventParticipant from '../models/EventParticipant.js';
+import EventMember from '../models/EventMember.js';
 const stripeSecret = process.env.STRIPE_SECRET;
 const stripe = stripeLib(stripeSecret);
 
@@ -87,7 +87,7 @@ const isRegistered = async (req, res) => {
     return res.status(404).json({ error: 'No such team' });
   }
 
-  const registered = await EventParticipant.findOne({eventId: eventId, teamId: teamId});
+  const registered = await EventMember.findOne({eventId: eventId, teamId: teamId});
 
   if (!registered) {
     return res.status(404).json({ error: 'Not registered' });
@@ -116,7 +116,7 @@ const registerTeam = async (req, res) => {
       return res.status(404).json({ error: 'No such team' });
     }
 
-    const eventParticipant = await EventParticipant.create({ teamId: team.id, eventId: eventId.id, registered: true });
+    const eventParticipant = await EventMember.create({ teamId: team.id, eventId: eventId.id, registered: true });
 
     res.status(200).json(eventParticipant);
 
