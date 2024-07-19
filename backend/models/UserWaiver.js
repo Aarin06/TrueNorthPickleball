@@ -30,6 +30,10 @@ const userWaiverSchema = new mongoose.Schema({
     deletedOn: {
       type: Date,
       default: null,
+    },
+    eventId: {
+      type: String,
+      required: true
     }
   }, { timestamps: true });
 

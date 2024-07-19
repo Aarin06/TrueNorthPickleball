@@ -1,32 +1,32 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Typography, Box } from "@mui/material";
-import { Link, useLocation } from "react-router-dom";
+import { Link,useSearchParams } from "react-router-dom";
 import "tailwindcss/tailwind.css";
 import Fail from '../media/close.png';
 import { getPayment } from "../api/teamService";
 import { getTeamId } from "../api/userService";
+
 function PaymentSuccess() {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const sessionId = queryParams.get('sessionId');
+  const [searchParams] = useSearchParams();
+  const eventId = searchParams.get("eventId");
   const teamId = getTeamId();
-  const [paymentStatus, setPaymentStatus] = useState(false)
+  const [payment, setPayment] = useState({})
 
 
   useEffect(() => {
    
-    getPayment(teamId).then((res) =>{
-      setPaymentStatus(res.status);
+    getPayment(teamId, eventId).then((res) =>{
+      setPayment(res);
     })
     .catch((err)=>{
-      setPaymentStatus(null);
+      setPayment(null);
     })
    
   }, []);
 
   return (
     <Container maxWidth="sm" className="py-16 text-center">
-      {paymentStatus === null ?
+      {payment.status === false ?
       <>
        <Box className="mb-8">
         <Typography variant="h4" className="text-4xl font-bold mb-4">
@@ -59,7 +59,7 @@ function PaymentSuccess() {
       </Button>
       <Button
         component={Link}
-        to="/waiver"
+        to={"/waiver/"+payment.eventId}
         variant="contained"
         color="primary"
         className="mt-4"

@@ -55,13 +55,13 @@ const getTeam = async (teamId) => {
   }
 };
 
-const getPayment = async (teamId) => {
+const getPayment = async (teamId, eventId) => {
   try {
     const token = getToken();
     if (!token) {
       throw new Error('No token found');
     }
-    const response = await axios.get(SERVER_URL + `/api/teams/${teamId}/payment`, {
+    const response = await axios.get(SERVER_URL + `/api/teams/${teamId}/payment/event/${eventId}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -93,13 +93,13 @@ const getRoster = async (teamId) => {
   }
 };
 
-const makeTeamPayment = async (teamId, userId) => {
+const makeTeamPayment = async (teamId, userId, eventId) => {
   try {
     const token = getToken();
     if (!token) {
       throw new Error('No token found');
     }
-    const response = await axios.post(`${SERVER_URL}/api/teams/payment`, { teamId, userId }, {
+    const response = await axios.post(`${SERVER_URL}/api/teams/payment`, { teamId, userId, eventId }, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

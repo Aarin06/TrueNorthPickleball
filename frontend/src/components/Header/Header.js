@@ -40,11 +40,8 @@ function Header() {
         <Link to={"/contactus"}>Contact Us</Link>
         {/* <Link to={"/schedule"}>Schedule</Link> */}
         <Link to={"/teams"}>Teams</Link>
-        {loggedIn ? 
-         <Link to={"/waiver"}>Waiver</Link>
-         :
-          <></>
-        }
+        <Link to={"/events"}>Events</Link>
+        
         
       </div>
 

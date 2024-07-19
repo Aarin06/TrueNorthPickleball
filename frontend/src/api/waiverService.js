@@ -11,13 +11,13 @@ const getToken = () => localStorage.getItem('token') || null;
 
 
 // Need to change for signing multiple waivers
-const signWaiver = async (userId, waiverId, checks, signature) => {
+const signWaiver = async (userId, waiverId, checks, signature,eventId) => {
   try {
     const token = getToken();
     if (!token) {
       throw new Error('No token found');
     }
-    const response = await axios.post(`${SERVER_URL}/api/waivers`, { userId, waiverId, checks, signature}, {
+    const response = await axios.post(`${SERVER_URL}/api/waivers`, { userId, waiverId, checks, signature, eventId}, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -30,13 +30,13 @@ const signWaiver = async (userId, waiverId, checks, signature) => {
 };
 
 // Get current user function
-const getUserWaiver = async (waiverId, userId) => {
+const getUserWaiver = async (waiverId, userId, eventId) => {
   try {
     const token = getToken();
     if (!token) {
       throw new Error('No token found');
     }
-    const response = await axios.get(`${SERVER_URL}/api/waivers/${waiverId}/user/${userId}`, {
+    const response = await axios.get(`${SERVER_URL}/api/waivers/${waiverId}/event/${eventId}/user/${userId}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

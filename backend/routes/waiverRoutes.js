@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post('/', authorize, signWaiver);
 
-router.get('/:waiverId/user/:userId',authorize, getUserWaiver);
+router.get('/:waiverId/event/:eventId/user/:userId',authorize, getUserWaiver);
 
 router.get('/', authorize, getWaiver);
 

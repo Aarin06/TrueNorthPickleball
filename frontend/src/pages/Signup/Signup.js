@@ -6,9 +6,11 @@ import JoinTeam from "../../components/JoinTeam/JoinTeam";
 import { addUser, signIn } from "../../api/userService";
 import { addTeam, checkTeams, joinTeam } from "../../api/teamService";
 import CreateAccount from "../../components/CreateAccount";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 function Signup() {
+  const [searchParams] = useSearchParams();
+  const eventId = searchParams.get("eventId");
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
   const navigate = useNavigate();
@@ -35,16 +37,20 @@ function Signup() {
       change: (value) => updateTeam("Experience", value),
       options: [
         {
-          label: "First time playing (Beginner)",
-          value: "0",
+          label: "3.0 (Intermidiate)",
+          value: "3.0",
         },
         {
-          label: "Played a couple times (Intermediate)",
-          value: "1",
+          label: "3.5 (Advanced)",
+          value: "3.5",
         },
         {
-          label: "Play consistently (Advanced)",
-          value: "2",
+          label: "4.0 (Advanced Intermediate)",
+          value: "4.0",
+        },
+        {
+          label: "4.5+ (Expert)",
+          value: "4.5+",
         },
       ],
     },
@@ -296,16 +302,24 @@ function Signup() {
           if (create) {
             addTeam(teamData).then((responseTeam) => {
               signIn(responseUser).then((res) => {
-                // navigate(`/waiver?teamId=${responseTeam._id}`);
-                navigate(`/waiver`);
+                if (eventId) {
+                  navigate(`/waiver/${eventId}`);
+                }
+                else{
+                  navigate(`/events`);
+                }
                 window.location.reload();
               });
             });
           } else {
             joinTeam(team[0].value, responseUser._id).then((responseTeam) => {
               signIn(responseUser).then((res) => {
-                // navigate(`/waiver?teamId=${responseTeam._id}`);
-                navigate(`/waiver`);
+                if (eventId) {
+                  navigate(`/waiver/${eventId}`);
+                }
+                else{
+                  navigate(`/events`);
+                }
                 window.location.reload();
               });
             });
@@ -328,7 +342,6 @@ function Signup() {
       return false;
     }
     let res = await checkTeams(team[0].value);
-    console.log(res);
     if (res.success){
       const updatedTeam = team.map((field) => {
         if (field.value.trim() === "") {
@@ -344,13 +357,12 @@ function Signup() {
       });
       setTeam(updatedTeam);
     }
-    else{
+    else if (create){
       allFieldsValidCreate = false;
       setErr("This Team Name is Taken.");
       
     }
   
-    console.log("here", allFieldsValidCreate)
     return create ? allFieldsValidCreate : allFieldsValidJoin;
   };
 

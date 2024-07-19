@@ -13,9 +13,10 @@ function JoinTeam({ team, rank }) {
 
   useEffect(() => {
     getTeams().then((response) =>{
+      console.log(response)
       response.map((item)=>{
         item.label = item.name+" ("+experienceMapping[item.experienceLevel]+")";
-        if (item.playerCount === 4){
+        if (item.playerCount >= 2){
           item.label += " FULL";
         }
       })
@@ -35,7 +36,7 @@ function JoinTeam({ team, rank }) {
           onChange={(e) => {team.change(e.target.value)}}
         >
           {teamOptions.map((option) => {
-            return <MenuItem disabled={option.playerCount === 4 ? true : false} key={option.id} value={option.name}>{option.label}</MenuItem>;
+            return <MenuItem disabled={option.playerCount >= 2 ? true : false} key={option.id} value={option.name}>{option.label}</MenuItem>;
           })}
         </Select>
         <FormHelperText>{team.helperText}</FormHelperText>

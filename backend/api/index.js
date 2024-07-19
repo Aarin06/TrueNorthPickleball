@@ -9,6 +9,7 @@ import stripeWebhook from '../routes/paymentRoutes.js';
 import session from 'express-session';
 import cors from 'cors';
 import stripeLib from 'stripe';
+import eventRoutes from '../routes/eventRoutes.js';
 
 const stripeSecret = process.env.STRIPE_SECRET;
 const stripe = stripeLib(stripeSecret);
@@ -72,6 +73,8 @@ if (!mongoUri) {
 // routes
 app.use('/api/users', userRoutes);
 app.use('/api/teams', teamRoutes);
+app.use('/api/events', eventRoutes);
+
 app.use('/api/waivers', waiverRoutes);
 
 // connect to db

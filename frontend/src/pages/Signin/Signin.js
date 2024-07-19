@@ -3,10 +3,12 @@ import Logo from "../../media/logo.png";
 import { Card, Grid, TextField, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { signIn } from "../../api/userService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 
 function Signin() {
+  const [searchParams] = useSearchParams();
+  const eventId = searchParams.get("eventId");
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [fields, setFields] = useState([
@@ -61,7 +63,13 @@ function Signin() {
       }, {});
 
       signIn(userData).then((res) =>{
-        navigate("/");
+        console.log("eid:",eventId)
+        if (eventId){
+          navigate(`/waiver/${eventId}`);
+        }
+        else{
+          navigate("/");
+        }
         window.location.reload();
       })
       .catch((err) =>{
@@ -101,8 +109,8 @@ function Signin() {
           </Button>
           <div className="flex w-full">
             {/* <p className="font-medium">Forgot Password?</p> */}
-            <Link to="/join" className="ml-auto font-medium">
-              Join Now
+            <Link to={eventId ? "/signup?eventId="+eventId : "/signup"} className="ml-auto font-medium">
+              create account
             </Link>
           </div>
         </div>

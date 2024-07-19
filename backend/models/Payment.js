@@ -18,6 +18,10 @@ const paymentSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+    eventId: {  
+      type: String,
+      required: true,
+    },
     deletedOn: {
       type: Date,
       default: null,

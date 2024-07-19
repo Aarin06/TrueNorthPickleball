@@ -50,23 +50,7 @@ const createUser = async (req, res) => {
     }
 
     const user = await User.create(userData);
-    const waiverData = {
-      userId:user._id,
-      signed: false,
-      waiverId: "6673e6f6fb3c11e87172eb3d",
-      checks:[
-        {
-          label: "I understand that there are no refunds for this summer league 2024 season.",
-          value: false,
-        },
-        {
-          label: "I acknowledge that games may be delayed, rescheduled and maybe cancelled due to weather conditions.",
-          value: false,
-        },
-      ]
-    }
     
-    await UserWaiver.create(waiverData);
     
     user.password = pass;
     res.status(200).json(user);
@@ -91,7 +75,6 @@ const signIn = async (req, res) => {
     const hash = user.password; // Load hash from your password DB.
     const password = userData.password; // This is the password passed in by the user
     const result = bcrypt.compareSync(password, hash);
- 
 
     if (!result) {
       return res.status(401).json({ message: "Incorrect username or password." });

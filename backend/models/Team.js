@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+const { Decimal128 } = mongoose.Types;
+
 
 const teamSchema = new mongoose.Schema({
     name: {
@@ -10,7 +12,7 @@ const teamSchema = new mongoose.Schema({
         required: true,
     },
     experienceLevel: {
-      type: Number,
+      type: String,
       required: true,
     },
     playerCount: {

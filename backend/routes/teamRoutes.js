@@ -38,7 +38,7 @@ router.post('/join', joinTeam);
 router.get('/:id', getTeam);
 
 // GET a single workout
-router.get('/:id/payment',authorize, getPayment);
+router.get('/:id/payment/event/:eventId',authorize, getPayment);
 
 // // UPDATE a workout
 // router.patch('/:id', updateTeam);

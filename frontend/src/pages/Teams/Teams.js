@@ -12,6 +12,7 @@ function Teams() {
 
   useEffect(() => {
     getTeams().then((response) => {
+      console.log(response);
       setTeams(response);
       setIsLoading(false);
     });

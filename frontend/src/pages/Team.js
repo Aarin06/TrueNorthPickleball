@@ -24,11 +24,11 @@ function Team() {
         setCaptain(res);
       });
 
-      getPayment(params.teamId).then((res) =>{
-        setPayment(res);
-      }).catch((err) =>{
-        setPayment({status:false})
-      })
+      // getPayment(params.teamId).then((res) =>{
+      //   setPayment(res);
+      // }).catch((err) =>{
+      //   setPayment({status:false})
+      // })
 
       getRoster(params.teamId).then((res) => {
         setRoster(res);

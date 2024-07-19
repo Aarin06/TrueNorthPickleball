@@ -6,8 +6,12 @@ import { getPayment, makeTeamPayment, getTeamCaptain } from "../api/teamService"
 import { getUserId, getTeamId } from "../api/userService";
 import { getWaiver, getUserWaiver, signWaiver } from "../api/waiverService";
 import SignatureCanvas from 'react-signature-canvas';
+import {useParams,useNavigate } from "react-router-dom";
+import { getEvent } from "../api/eventService";
 
 function Waiver() {
+  const navigate = useNavigate();
+  const params = useParams();
   const teamId = getTeamId();
   const userId = getUserId();
   const sigCanvas = useRef({});
@@ -21,6 +25,7 @@ function Waiver() {
   const [loadingUserWaiver, setLoadingUserWaiver] = useState(true);
   const [loadingTeamCaptain, setLoadingTeamCaptain] = useState(true);
   const [loadingPayment, setLoadingPayment] = useState(true);
+  const [event, setEvent] = useState({});
 
   const clear = () => {
     sigCanvas.current.clear();
@@ -38,7 +43,7 @@ function Waiver() {
   const handleSignWaiver = async () => {
     const signature = sigCanvas.current.getTrimmedCanvas().toDataURL('image/png');
 
-    signWaiver(userId, waiver._id, checks, signature).then((res) => {
+    signWaiver(userId, waiver._id, checks, signature, params.eventId).then((res) => {
       setUserWaiver(res);
     });
   };
@@ -48,7 +53,7 @@ function Waiver() {
 
     if (isTeamCaptain) {
       try {
-        const res = await makeTeamPayment(teamId, userId);
+        const res = await makeTeamPayment(teamId, userId, params.eventId);
 
         const result = await stripe.redirectToCheckout({
           sessionId: res.id
@@ -72,7 +77,7 @@ function Waiver() {
       .then((res) => {
         setWaiver(res);
         setLoadingWaiver(false);
-        return getUserWaiver(res._id, userId);
+        return getUserWaiver(res._id, userId, params.eventId);
       })
       .then((res) => {
         setUserWaiver(res);
@@ -95,7 +100,7 @@ function Waiver() {
         setLoadingTeamCaptain(false);
       });
 
-    getPayment(teamId)
+    getPayment(teamId, params.eventId)
       .then((res) => {
         setPaymentStatus(res.status);
         setLoadingPayment(false);
@@ -105,6 +110,14 @@ function Waiver() {
         setLoadingPayment(false);
       });
   }, [teamId, userId]);
+
+  useEffect(() => {
+    getEvent(params.eventId).then((response) => {
+      setEvent(response);
+    }).catch((error) => {
+      navigate("/error")
+    });
+  },[params.eventId]);
 
   const isLoading = loadingWaiver || loadingUserWaiver;
 

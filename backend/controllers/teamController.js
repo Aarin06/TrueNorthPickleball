@@ -5,7 +5,7 @@ import TeamMember from '../models/TeamMember.js';
 import mongoose from 'mongoose';
 import stripeLib from 'stripe';
 import Payment from '../models/Payment.js';
-
+import EventParticipant from '../models/eventParticipant.js';
 const stripeSecret = process.env.STRIPE_SECRET;
 const stripe = stripeLib(stripeSecret);
 
@@ -52,13 +52,13 @@ const getTeam = async (req, res) => {
 
 // get a single workout
 const getPayment = async (req, res) => {
-  const { id } = req.params;
+  const { id, eventId} = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such team' });
   }
 
-  const payment = await Payment.findOne({teamId: id});
+  const payment = await Payment.findOne({teamId: id, eventId: eventId});
 
   if (!payment) {
     return res.status(404).json({ error: 'No such payment' });
@@ -164,7 +164,7 @@ const updateTeam = async (req, res) => {
 
 const joinTeam = async (req, res) => {
   const { teamName, userId } = req.body;
-  console.log(teamName, userId)
+
   try {
     // Find the team by teamName
     const team = await Team.findOne({ name: teamName });
@@ -192,7 +192,7 @@ const joinTeam = async (req, res) => {
 };
 
 const makeTeamPayment = async (req, res) => {
-  const { userId, teamId } = req.body;
+  const { userId, teamId, eventId } = req.body;
 
   const lineItems = [{
     price_data: {
@@ -201,7 +201,7 @@ const makeTeamPayment = async (req, res) => {
         name: "Northern Pickleball 2024 Summer League Pass",
         description: "One time league pass for the 2024 Northern Pickleball Summer League. Includes: 7 weeks of play plus an all-day tournament during the final week, Grand prize worth up to $400, Lessons during first week of play for beginners."
       },
-      unit_amount: 30000 // Amount in cents
+      unit_amount: 20000 // Amount in cents
     },
     quantity: 1
   }];
@@ -210,21 +210,26 @@ const makeTeamPayment = async (req, res) => {
     payment_method_types: ["card"],
     line_items: lineItems,
     mode: "payment",
-    success_url: `http://localhost:3000/success`,
-    cancel_url: `http://localhost:3000/failure`,
-    metadata: { userId, teamId } // Include userId and teamId in metadata here
+    success_url: `http://localhost:3000/success?eventId=${eventId}&teamId=${teamId}&userId=${userId}`,
+    cancel_url: `http://localhost:3000/failure?eventId=${eventId}&teamId=${teamId}&userId=${userId}`,
+    metadata: { userId, teamId, eventId } // Include userId and teamId in metadata here
   });
 
-  await Payment.create({ userId, teamId, status: false, sessionId: session.id });
+  await Payment.create({ userId, teamId, status: false, sessionId: session.id, eventId });
 
   res.json({ id: session.id });
 };
 
-const handlePostPayment = async (userId, teamId, status) => {
+const handlePostPayment = async (userId, teamId, status, eventId) => {
   try {
-    const payment = await Payment.updateOne({ userId, teamId }, { $set: { status: status } });
+    console.log("userId", userId, "teamId", teamId, "status", status, "eventId", eventId);
+    const payment = await Payment.updateOne({ userId, teamId, eventId }, { $set: { status: status } });
     const team = await Team.updateOne({ _id: teamId, captain: userId }, { $set: { locked: !status } });
-
+    const eventParticipant = await EventParticipant.findOneAndUpdate(
+      { teamId: teamId, eventId: eventId },
+      { $set: { registered: status } },
+      { upsert: true, new: true }  // upsert creates if not exists, new returns the modified document
+    );
     return payment;
   } catch (error) {
     console.error(`Failed to update payment status for userId: ${userId}, teamId: ${teamId}`, error);

@@ -18,6 +18,8 @@ import HeaderMobile from "./components/Header/HeaderMobile";
 import AboutUs from "./pages/AboutUs";
 // import Schedule from "./pages/Schedule";
 import ContactUs from "./pages/ContactUs";
+import Events from "./pages/Events";
+import Event from "./pages/Event";
 import { getUserId } from "./api/userService";
 import Waiver from "./pages/Waiver";
 import PaymentSuccess from "./pages/PaymentSuccess";
@@ -92,7 +94,7 @@ const loggedInRouter = createBrowserRouter([
   //   )
   // },
   {
-    path: "/waiver",
+    path: "/waiver/:eventId",
     element: (
       <Layout>
         <Waiver />
@@ -112,6 +114,22 @@ const loggedInRouter = createBrowserRouter([
     element: (
       <Layout>
         <PaymentFailure />
+      </Layout>
+    )
+  },
+  {
+    path: "/events",
+    element: (
+      <Layout>
+        <Events />
+      </Layout>
+    )
+  },
+  {
+    path: "/events/:eventId",
+    element: (
+      <Layout>
+        <Event />
       </Layout>
     )
   }
@@ -194,7 +212,31 @@ const router = createBrowserRouter([
         <Join />
       </Layout>
     )
-  }
+  },
+  {
+    path: "/events",
+    element: (
+      <Layout>
+        <Events />
+      </Layout>
+    )
+  },
+  {
+    path: "/events/:eventId",
+    element: (
+      <Layout>
+        <Event />
+      </Layout>
+    )
+  },
+  {
+    path: "/error",
+    element: (
+      <Layout>
+        <Error />
+    </Layout>
+    )
+  },
 ]);
 
 const App = () => {
