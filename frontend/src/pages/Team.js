@@ -97,7 +97,7 @@ function Team() {
               color="primary"
               sx={{fontSize:"25px"}}
             >
-              {joined ? "Joined" : team.playerCount !== 4 ? "Join Team" : "Full"}
+              {joined ? "Joined" : team.playerCount < 2 ? "Join Team" : "Full"}
             </Button>
           </Card>
         </Grid>

@@ -7,7 +7,7 @@ import UserWaiver from '../models/UserWaiver.js';
 const getWaiver = async (req, res) => {
   // const { id } = req.params;
 
-  const id = "667892f1b1bdf930b519b18c";
+  const id = "6699f6b7a62722d0d83793f3";
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such waiver' });
@@ -72,7 +72,7 @@ const getUserWaiver = async (req, res) => {
       userId:userId,
       eventId: eventId,
       signed: false,
-      waiverId: "667892f1b1bdf930b519b18c",
+      waiverId: "6699f6b7a62722d0d83793f3",
       checks:[
         {
           label: "I understand that there are no refunds for this summer league 2024 season.",

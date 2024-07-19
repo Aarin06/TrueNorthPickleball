@@ -33,7 +33,7 @@ function VideoBg() {
         {!userId && (
           <Button
             LinkComponent={Link}
-            to="/join"
+            to="/events/6699f1f056acc3969dc12f60"
             variant="contained"
             sx={{ fontSize: "50px", borderRadius: "70px", padding: "5px 40px", marginTop:"10px" }}
           >

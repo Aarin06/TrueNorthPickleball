@@ -198,8 +198,8 @@ const makeTeamPayment = async (req, res) => {
     price_data: {
       currency: "cad",
       product_data: {
-        name: "Northern Pickleball 2024 Summer League Pass",
-        description: "One time league pass for the 2024 Northern Pickleball Summer League. Includes: 7 weeks of play plus an all-day tournament during the final week, Grand prize worth up to $400, Lessons during first week of play for beginners."
+        name: "Northern Pickleball 2024 Summer Tournament Entry Pass",
+        description: "One time tournament pass for the 2024 Northern Pickleball Summer Tournament. Includes: An all-day tournament, Grand prize worth up to $500!"
       },
       unit_amount: 20000 // Amount in cents
     },
@@ -210,8 +210,8 @@ const makeTeamPayment = async (req, res) => {
     payment_method_types: ["card"],
     line_items: lineItems,
     mode: "payment",
-    success_url: `http://localhost:3000/success?eventId=${eventId}&teamId=${teamId}&userId=${userId}`,
-    cancel_url: `http://localhost:3000/failure?eventId=${eventId}&teamId=${teamId}&userId=${userId}`,
+    success_url: `https://northernpickleball.ca/success?eventId=${eventId}&teamId=${teamId}&userId=${userId}`,
+    cancel_url: `https://northernpickleball.ca/failure?eventId=${eventId}&teamId=${teamId}&userId=${userId}`,
     metadata: { userId, teamId, eventId } // Include userId and teamId in metadata here
   });
 
@@ -225,7 +225,7 @@ const handlePostPayment = async (userId, teamId, status, eventId) => {
     console.log("userId", userId, "teamId", teamId, "status", status, "eventId", eventId);
     const payment = await Payment.updateOne({ userId, teamId, eventId }, { $set: { status: status } });
     const team = await Team.updateOne({ _id: teamId, captain: userId }, { $set: { locked: !status } });
-    const eventParticipant = await EventMember.findOneAndUpdate(
+    const eventMember = await EventMember.findOneAndUpdate(
       { teamId: teamId, eventId: eventId },
       { $set: { registered: status } },
       { upsert: true, new: true }  // upsert creates if not exists, new returns the modified document
