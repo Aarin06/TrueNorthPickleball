@@ -19,12 +19,9 @@ function AboutUs() {
         </Typography>
         <br></br>
         <Typography variant="body1" className="mb-4">
-        Welcome to Northern Pickleball, a vibrant and inclusive community dedicated to promoting the exciting sport of pickleball. Our club was founded with the mission of providing a fun, friendly, and competitive environment for players of all skill levels. Whether you are a seasoned pro looking to hone your skills or a beginner eager to learn the basics, our club will offer a range of programs, clinics, and events designed to help you enjoy and improve your game — kicking off with our 2024 Summer League! We believe in the power of pickleball to bring people together, foster camaraderie, and promote a healthy, active lifestyle.
+        Welcome to Northern Pickleball. Our goal is to create a fun, competitive and friendly environment for players to enjoy honing in their skills and improving their game. By becoming a member of our league our aim is to ensure you have a consistent experience on and off the court and feel a sense of belonging in our vibrant growing community.
         </Typography>
         <br></br>
-        <Typography variant="body1" className="mb-4">
-        Join us and become part of a dynamic and supportive network of pickleball enthusiasts who share your passion for this fast-growing sport. Together, let’s elevate our game and enjoy every moment on the court.
-        </Typography>
       </Box>
 
       <Box className="mb-10">
@@ -33,6 +30,14 @@ function AboutUs() {
         </Typography>
         <br></br>
         <Typography variant="body1" className="mb-4">
+        We offer house leagues along with competitive one day tournaments. Our leagues run on 4 month cycle and guarantee competitive matches on a weekly basis and our tournaments are fast paced with highly competitive matches over a series of rounds all in a single day. 
+        </Typography>
+        <br></br>
+        <Typography variant="body1" className="mb-4">
+        Join us and become part of a dynamic and supportive network of pickleball enthusiasts who share your passion for this fast-growing sport. Together, let’s elevate our game and enjoy every moment on the court.
+        </Typography>
+
+        {/* <Typography variant="body1" className="mb-4">
         At Northern Pickleball, members enjoy a wide range of benefits designed to enhance their playing experience and foster a vibrant community. Our club offers exclusive access to well-maintained courts and organized leagues and tournaments for all skill levels. Members will have the chance to participate in social events and mixers, providing opportunities to meet fellow enthusiasts and build lasting friendships. With a commitment to inclusivity and enjoyment, the Northern Pickleball ensures every member finds their place on the court.        </Typography>
         <br></br>
         <Typography variant="body1" className="mb-4">
@@ -79,7 +84,7 @@ function AboutUs() {
         <br></br>
         <Typography variant="body" className="mb-4">
         <a className="text-red-400 underline" href="https://usapickleball.org">Learn More</a> about the original of Pickleball USA Pickleball.
-        </Typography>
+        </Typography> */}
       </Box>
       
       <Box className="mb-16">

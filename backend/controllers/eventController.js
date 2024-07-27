@@ -9,7 +9,7 @@ const stripe = stripeLib(stripeSecret);
 
 // get all workouts
 const getEvents = async (req, res) => {
-  const events = await Event.find({deletedOn: null}).sort({ createdAt: -1 });
+  const events = await Event.find({deletedOn: null}).sort({ createdAt: 1 });
 
   // const event = await Event.create({
   //   name: 'Summer Tournament',
@@ -116,9 +116,9 @@ const registerTeam = async (req, res) => {
       return res.status(404).json({ error: 'No such team' });
     }
 
-    const eventParticipant = await EventMember.create({ teamId: team.id, eventId: eventId.id, registered: true });
+    const eventMember = await EventMember.create({ teamId: team.id, eventId: eventId.id, registered: true });
 
-    res.status(200).json(eventParticipant);
+    res.status(200).json(eventMember);
 
   } catch (error) {
     console.log(error);
