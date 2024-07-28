@@ -49,7 +49,7 @@ function Event() {
       event.eventData ?
       <Container maxWidth="xl" className="py-8">
         <Box className="text-center mb-8">
-          <div className="text-6xl font-normal mb-8">
+          <div className="text-5xl font-normal mb-8">
             {event.eventData.title}
           </div>
         </Box>

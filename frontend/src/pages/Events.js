@@ -50,8 +50,8 @@ function Events() {
         <Grid container spacing={2} className="flex flex-wrap">
         {events.map((event) => (
           <Grid item xs={12} sm={6} md={4} key={event._id} className="flex">
-            <Card elevation={5} className="p-4 flex flex-col items-center justify-center flex-1">
-              <Typography variant="h4">
+            <Card elevation={5} className="p-4 flex flex-col items-center justify-center flex-1 text-center">
+              <Typography variant="h4" className="">
                 {event.name} 
               </Typography>
               {event.allDay ?<>
