@@ -1,5 +1,5 @@
 import "./VideoBg.css";
-import videoBg from "../../media/video01.MP4";
+import videoBg from "../../media/video2.mp4";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { getUserId, getUser } from "../../api/userService";

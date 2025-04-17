@@ -86,14 +86,7 @@ function AboutUs() {
         <a className="text-red-400 underline" href="https://usapickleball.org">Learn More</a> about the original of Pickleball USA Pickleball.
         </Typography> */}
       </Box>
-      
-      <Box className="mb-16">
-        <Typography variant="body1">
-         In Partnership with,
-        </Typography>
-        <img className="w-96" src={Fairgrounds} alt="logo" />
-        
-      </Box>
+     
       
       {/* <Box className="mb-16">
         <Typography variant="h3" className="text-3xl font-semibold mb-4">
